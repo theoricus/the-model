@@ -15,5 +15,8 @@ before_script:
   - java -jar selenium-server-standalone-2.33.0.jar > /dev/null &
   - sleep 10
 
+script:
+  - make test.coveralls
+
 # enabling mongodb
 services: mongodb
