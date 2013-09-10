@@ -53,7 +53,7 @@ Let's cut to the chase.
 
 > **HAPPY NOTE :)**<br/>
 > If you're on OSX, you can simply run `make setup` and go right to item
-**[2. Databases](#databases)**, this command will download files, unzip them and
+**[2. Databases](#2-databases)**, this command will download files, unzip them and
 put everything in the right place. But if you feel the need or if you are in
 other platforms, you may want continue reading.
 
