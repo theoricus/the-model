@@ -2,7 +2,15 @@
 
 Model layer for [Theoricus](https://github.com/theoricus/theoricus) framework.
 
-# Usage Draft
+[![Stories in Ready](https://badge.waffle.io/theoricus/the-model.png)](http://waffle.io/theoricus/the-model)  
+
+[![Build Status](https://travis-ci.org/theoricus/the-model.png?branch=master)](https://travis-ci.org/theoricus/the-model) [![Coverage Status](https://coveralls.io/repos/theoricus/the-model/badge.png)](https://coveralls.io/r/theoricus/the-model) [![Dependency Status](https://gemnasium.com/theoricus/the-model.png)](https://gemnasium.com/theoricus/the-model)
+
+<!-- Uncomment this block after first public release in NPM
+[![NPM version](https://badge.fury.io/js/theoricus.png)](http://badge.fury.io/js/theoricus)
+-->
+
+# Usage Drafts
 
 Simple draft demonstrating of how use this.
 
