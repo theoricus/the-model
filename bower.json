@@ -1,0 +1,26 @@
+{
+  "name": "the-model",
+  "version": "0.1.0",
+  "author": "Anderson Arboleya <anderson@arboleya.me>",
+  "contributors": [
+    "Giulian Drimba <giuliandrimba@gmail.com>"
+  ],
+  "description": "Model layer used in Theoricus",
+  "main": "lib/index.js",
+  "keywords": [
+    "coffeescript",
+    "theoricus",
+    "model"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "src"
+  ],
+  "dependencies": {
+    "jquery": "2.0.x"
+  }
+}
