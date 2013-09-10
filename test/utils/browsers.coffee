@@ -1,7 +1,7 @@
 exports['local'] = ->
   return [
-    # phantomjs
-    chrome_mountain
+    phantomjs
+    # chrome_mountain
     # firefox_mountain
     # safari6_mountain
   ]
