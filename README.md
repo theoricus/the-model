@@ -12,9 +12,20 @@ Model layer for [Theoricus](https://github.com/theoricus/theoricus) framework.
 
 # Usage Drafts
 
-Simple draft demonstrating of how use this.
+Simple draft demonstrating how this should work.
+
+> Attention, is a **WIP**! Do not use it yet.
+
+## Main concept
+
+ 1. `Sync` calls **never** touch database, everything is local
+ 1. `Async` calls **always** touches database, everything is remote and local
+
+The difference is passed callback that may exist or not.
 
 ## Model
+
+Configuring your model.
 
 ````coffeescript
 # app/models/user
@@ -30,10 +41,12 @@ class User extends AppModel
       'find'   : '/users/find.json'
     keys:
       'name' : String
-      'age'  : (val)-> return val >= 18 # validates if user is of age
+      'age'  : (val)-> val >= 18 # validates if user is of age
 ````
 
 ## Controller
+
+Using it inside a controller (or anywhere else).
 
 ````coffeescript
 #app/controllers/users
@@ -42,21 +55,21 @@ User = require 'app/models/user'
 
 class Users extends AppController
 
-  # CREATE
+  # CREATE (static)
   # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   # sync
-  record = User.create name: 'anderson', age: 29
+  record = User.create name: 'foo', age: 20
 
   # async
-  User.create name: 'anderson', age:29, (record, status, res)->
+  User.create name: 'foo', age:20, (record, status, res)->
     console.log '-----------------------------------'
     console.log 'record created locally and remotely'
     console.log 'record', record
     console.log 'res', res
     console.log 'error', error
 
-  # READ
+  # READ (static)
   # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   # sync
@@ -70,21 +83,21 @@ class Users extends AppController
     console.log 'res', res
     console.log 'error', error
 
-  # UPDATE
+  # UPDATE (instance)
   # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   # sync
-  record.update name: 'arboleya', age: 30
+  record.update name: 'bar', age: 30
 
   # async
-  record.update name: 'arboleya', age: 30, (record, res, error)->
+  record.update name: 'bar', age: 30, (record, res, error)->
     console.log '-----------------------------------'
     console.log 'record updated locally and remotely'
     console.log 'record', record
     console.log 'res', res
     console.log 'error', error
 
-  # DELETE
+  # DELETE (instance)
   # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   # sync
@@ -97,11 +110,11 @@ class Users extends AppController
     console.log 'res', res
     console.log 'error', error
 
-  # ALL
+  # ALL (static)
   # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   # sync
-  records = do User.all
+  records = User.all()
 
   # async
   User.all (records, res, error)->
@@ -111,11 +124,11 @@ class Users extends AppController
     console.log 'res', res
     console.log 'error', error
 
-  # FIND
+  # FIND (static)
   # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   # sync
-  records = do User.find name: 'anderson'
+  records = User.find name: 'foo'
 
   # async
   User.find (records, res, error)->
