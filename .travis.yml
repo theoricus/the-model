@@ -1,0 +1,19 @@
+# enabling nodejs
+language: node_js
+
+
+node:
+  - 0.10.x
+
+before_script:
+  # installing bower and its dependencies
+  - npm install -g bower
+  - bower install
+
+  # downloading and starting selenium
+  - wget https://selenium.googlecode.com/files/selenium-server-standalone-2.33.0.jar
+  - java -jar selenium-server-standalone-2.33.0.jar > /dev/null &
+  - sleep 10
+
+# enabling mongodb
+services: mongodb
