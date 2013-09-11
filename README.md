@@ -31,18 +31,29 @@ Configuring your model.
 ````coffeescript
 # app/models/user
 class User extends AppModel
-
+  
+  # general config method
   @config
+    
+    # url ending points
     urls:
-      'create' : '/users.json'
-      'read'   : '/users/:id.json'
-      'update' : '/users/:id.json'
-      'delete' : '/users/:id.json'
-      'all'    : '/users.json'
-      'find'   : '/users/find.json'
+      create: '/users.json'
+      read: '/users/:id.json'
+      update: '/users/:id.json'
+      delete: '/users/:id.json'
+      all: '/users.json'
+      find: '/users/find.json'
+    
+    # properties and validation methods
     keys:
-      'name' : String
-      'age'  : (val)-> val >= 18 # validates if user is of age
+      name: String
+      age: (val)-> val >= 18 # validates if user is of age
+    
+    # default name for id property, the default is `id`
+    id: 'id'
+
+    # you may want to change that, mongodb for instance uses `_id`
+    # id: '_id'
 ````
 
 ## Controller
@@ -57,14 +68,13 @@ User = require 'app/models/user'
 class Users extends AppController
 
   # CREATE (static)
-  # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  # ----------------------------------------------------------------------------
 
   # sync
   record = User.create name: 'foo', age: 20
 
   # async
   User.create name: 'foo', age:20, (err, record)->
-    console.log '-----------------------------------'
     if err?
       console.log 'err', err
     else
@@ -72,14 +82,13 @@ class Users extends AppController
       console.log 'record', record
 
   # READ (static)
-  # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  # ----------------------------------------------------------------------------
 
   # sync
   record = User.read 0
 
   # async
   User.read 0, (err, record)->
-    console.log '-----------------------------------'
     if err?
       console.log 'err', err
     else
@@ -87,7 +96,7 @@ class Users extends AppController
       console.log 'record', record
 
   # UPDATE (static and instance)
-  # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  # ----------------------------------------------------------------------------
 
   # sync
   User.update 0, name: 'bar', age: 30
@@ -96,7 +105,6 @@ class Users extends AppController
   # async
   User.update 0, name: 'bar', age: 30, (err, record)-> #...
   record.update name: 'bar', age: 30, (err, record)->
-    console.log '-----------------------------------'
     if err?
       console.log 'err', err
     else
@@ -104,7 +112,7 @@ class Users extends AppController
       console.log 'record', record
 
   # DELETE (static / instance)
-  # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  # ----------------------------------------------------------------------------
 
   # sync
   User.delete 0
@@ -113,7 +121,6 @@ class Users extends AppController
   # async
   User.delete 0, (err, record)-> # ...
   record.delete (err, record)->
-    console.log '-----------------------------------'
     if err?
       console.log 'err', err
     else
@@ -121,14 +128,13 @@ class Users extends AppController
       console.log 'record', record
 
   # ALL (static)
-  # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  # ----------------------------------------------------------------------------
 
   # sync
   records = User.all()
 
   # async
   User.all (err, records)->
-    console.log '-----------------------------------'
     if err?
       console.log 'err', err
     else
@@ -136,14 +142,13 @@ class Users extends AppController
       console.log 'records', records
 
   # FIND (static)
-  # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  # ----------------------------------------------------------------------------
 
   # sync
   records = User.find name: 'foo'
 
   # async
   User.find name: 'foo', (err, records)->
-    console.log '-----------------------------------'
     if err?
       console.log 'err', err
     else
