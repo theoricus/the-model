@@ -1,4 +1,5 @@
 _ = require 'lodash'
+$ = require '../bower_components/jquery/jquery'
 
 module.exports = class Model
 
