@@ -3,6 +3,7 @@
 The basic concept here is about:
 
 1. A testable application codename `todo`
+1. Server Side `api` used by the `todo`
 2. Tests written on top of Selenium WebDriver, that mimics an user navigating
 through the app
 
@@ -13,10 +14,11 @@ The basic folder structure is:
   * `/test`
     * `/fixture`
         * `/todo` sample app
+        * `/api` server api
     * `/functional` functional tests, check them out to get the feeling!
     * `/services` pre-requiste files listed bellow
     * `/utils` test utilities
-    * `/coverage` tests coverage results
+    * `/coverage` tests coverage results (ignored in git, created on demmand)
     * `/runner.coffee` main test runner
 
 ## Used Libraries
@@ -27,8 +29,10 @@ This setup involves this awesome libraries:
 * [Mocha](https://github.com/visionmedia/mocha) - Test Runner (using BDD)
 * [Chai](https://github.com/chaijs/chai) - Test Assertions
 * [Istanbul](https://github.com/gotwarlost/istanbul) - Coverage Instrumentation
-* [Istanbul-Middleware](https://github.com/gotwarlost/istanbul-middleware) - Mind blowing coverage generation over WebDrive
-* [Express](https://github.com/visionmedia/express) - Used to serve the `probatus` sample app withing the `istanbul-middleware`
+* [Istanbul-Middleware](https://github.com/gotwarlost/istanbul-middleware) -
+Mind blowing coverage generation over Web Drive
+* [Express](https://github.com/visionmedia/express) - Used to serve the
+`todo` sample app within the `istanbul-middleware`
 * And some others..
 
 ## Used Services
@@ -53,8 +57,8 @@ Let's cut to the chase.
 
 > **HAPPY NOTE :)**<br/>
 > If you're on OSX, you can simply run `make setup` and go right to item
-**[2. Databases](#2-databases)**, this command will download files, unzip them and
-put everything in the right place. But if you feel the need or if you are in
+**[2. Databases](#2-databases)**, this command will download files, unzip them
+and put everything in the right place. But if you feel the need or if you are in
 other platforms, you may want continue reading.
 
 Download and copy chromedriver, sauce-connect and selenium-server to the
@@ -98,14 +102,15 @@ brew install mongodb
 The tests can ben run on whatever browser you want.
 
 Locally (if you're on OSX) you'll probably be fine with four:
- * PhantomJS (for headless testing)
- * Firefox
+
+ * PhantomJS (for headless testing) - [*default*]
  * Chrome
  * Safari
+ * Firefox
 
 You can find the whole browser matrix in the file:
 
- * [`tests/www/tests/utils/browsers.coffee`](https://github.com/serpentem/theoricus/blob/master/tests/www/tests/utils/browsers.coffee)
+ * [`test/utils/browsers.coffee`](https://github.com/theoricus/the-model/blob/master/test/utils/browsers.coffee)
 
 You'll see two exports methods that returns an array of browsers configs:
 
@@ -114,12 +119,16 @@ exports['local'] = ->
 exports['sauce labs'] = ->
 ````
 
-Obviously, the `local` is your local config. By default it will only run in `phantomjs` js. Uncomment others to test across multiple browsers at once.
+Obviously, the `local` is your local config. By default it will only run in
+`phantomjs` js. Uncomment others to test across multiple browsers at once.
 
-The `sauce labs` is intended to run in the [Sauce Labs](http://saucelabs.com) grid, which provides vast combos of `browser` x `platforms`. Check it out:
+The `sauce labs` is intended to run in the [Sauce Labs](http://saucelabs.com)
+grid, which provides vast combos of `browser` x `platforms`. Check it out:
 > [https://saucelabs.com/docs/platforms](https://saucelabs.com/docs/platforms)
 
-**Please** note that all possible and good combinations is already built in the `browsers.coffee` file, feel free to uncomment anything locally. Just do not push it back.
+**Please** note that all possible and good combinations is already built in the
+`browsers.coffee` file, feel free to uncomment anything locally. Just do not
+push it back.
 
 
 ## 4. Sauce Connect
@@ -127,7 +136,9 @@ The `sauce labs` is intended to run in the [Sauce Labs](http://saucelabs.com) gr
 1. To run tests on Sauce Connect, first create an account:
 
 [https://saucelabs.com/signup](https://saucelabs.com/signup)
-> Remember that choosen `username` will be your public profile for testing `theoricus`. A good choice may be using `yourname-theoricus`, I don't know. Feel free.
+> Remember that choosen `username` will be your public profile for testing
+`the-model`. A good choice may be using `yourname-the-model`, I don't know.
+Feel free.
 
 1. Then add your credentials to your env:
 
@@ -136,14 +147,18 @@ export SAUCE_USERNAME=XXX
 export SAUCE_ACCESS_KEY=YYY
 ````
 
-> Worths to say, always run your tests locally to save some time. Running everything on sauce labs take much time, which you may want to avoid as much as possible.
+> Worths to say, always run your tests locally to save some time. Running
+everything on sauce labs take much time, which you may want to avoid as much as
+possible.
 
 # ★ Testing
 
 ## Pre-requisite
 
-For all steps described bellow, you will need to start *mongodb* **first** in
-one separated terminal tab.
+!**ATTENTION**!
+
+ * For all steps described bellow, you will need to start *mongodb* **first**
+in one separated terminal tab.
 
 ```
 mongod
@@ -175,14 +190,14 @@ make test
 To get coverage, instead of `make test` simply run:
 
 ````
-make test.coverage
+make test.cover
 ````
 
 For previwing `LCOV-HTML` report right away, run with `preview`:
 
 
 ````
-make test.coverage.preview
+make test.cover.preview
 ````
 
 Then go to [http://localhost:8080](http://localhost:8080).
