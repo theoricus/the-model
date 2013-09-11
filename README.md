@@ -20,8 +20,9 @@ Simple draft demonstrating how this should work.
 
  1. `Sync` calls **never** touch database, everything is local
  1. `Async` calls **always** touches database, everything is remote and local
+ 1. Some methods are `static` only, others are `static` and `local` (instance)
 
-The difference is passed callback that may exist or not.
+The difference is the passed callback that may exist or not.
 
 ## Model
 
@@ -62,12 +63,13 @@ class Users extends AppController
   record = User.create name: 'foo', age: 20
 
   # async
-  User.create name: 'foo', age:20, (record, status, res)->
+  User.create name: 'foo', age:20, (err, record)->
     console.log '-----------------------------------'
-    console.log 'record created locally and remotely'
-    console.log 'record', record
-    console.log 'res', res
-    console.log 'error', error
+    if err?
+      console.log 'err', err
+    else
+      console.log 'record created locally and remotely'
+      console.log 'record', record
 
   # READ (static)
   # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -76,39 +78,47 @@ class Users extends AppController
   record = User.read 0
 
   # async
-  User.read 0, (record, res, error)->
+  User.read 0, (err, record)->
     console.log '-----------------------------------'
-    console.log 'record read remotely'
-    console.log 'record', record
-    console.log 'res', res
-    console.log 'error', error
+    if err?
+      console.log 'err', err
+    else
+      console.log 'record read remotely'
+      console.log 'record', record
 
-  # UPDATE (instance)
+  # UPDATE (static and instance)
   # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   # sync
+  User.update 0, name: 'bar', age: 30
   record.update name: 'bar', age: 30
 
   # async
-  record.update name: 'bar', age: 30, (record, res, error)->
+  User.update 0, name: 'bar', age: 30, (err, record)-> #...
+  record.update name: 'bar', age: 30, (err, record)->
     console.log '-----------------------------------'
-    console.log 'record updated locally and remotely'
-    console.log 'record', record
-    console.log 'res', res
-    console.log 'error', error
+    if err?
+      console.log 'err', err
+    else
+      console.log 'record updated locally and remotely'
+      console.log 'record', record
 
-  # DELETE (instance)
+  # DELETE (static / instance)
   # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
   # sync
+  User.delete 0
   record.delete()
 
   # async
-  record.delete (res, error)->
+  User.delete 0, (err, record)-> # ...
+  record.delete (err, record)->
     console.log '-----------------------------------'
-    console.log 'record deleted locally and remotely'
-    console.log 'res', res
-    console.log 'error', error
+    if err?
+      console.log 'err', err
+    else
+      console.log 'record deleted locally and remotely'
+      console.log 'record', record
 
   # ALL (static)
   # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -117,12 +127,13 @@ class Users extends AppController
   records = User.all()
 
   # async
-  User.all (records, res, error)->
+  User.all (err, records)->
     console.log '-----------------------------------'
-    console.log 'records fetched remotely and saved locally, returning all'
-    console.log 'records', records
-    console.log 'res', res
-    console.log 'error', error
+    if err?
+      console.log 'err', err
+    else
+      console.log 'records fetched remotely and saved locally, returning all'
+      console.log 'records', records
 
   # FIND (static)
   # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -131,10 +142,11 @@ class Users extends AppController
   records = User.find name: 'foo'
 
   # async
-  User.find (records, res, error)->
+  User.find name: 'foo', (err, records)->
     console.log '-----------------------------------'
-    console.log 'records fetched remotely and saved locally, finding in both'
-    console.log 'records', records
-    console.log 'res', res
-    console.log 'error', error
+    if err?
+      console.log 'err', err
+    else
+      console.log 'records fetched remotely and saved locally, finding in both'
+      console.log 'records', records
 ````
