@@ -1,8 +1,8 @@
-Database = require "./database"
+
 mongo = require "mongodb"
 BSON = mongo.BSONPure
 
-db = new Database 'todos'
+db = null
 
 general_handler = (res, err)->
   unless err
@@ -10,6 +10,8 @@ general_handler = (res, err)->
     res.send res
   else
     res.send err
+
+exports.set_db = (database)-> db = database
 
 exports.all = (req, res)->
   db.all (res, err)->

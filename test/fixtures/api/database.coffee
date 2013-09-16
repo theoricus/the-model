@@ -6,7 +6,7 @@ BSON = mongo.BSONPure
 
 module.exports = class Database
 
-  constructor:(@name, @host = "localhost", @port=27017)->
+  constructor:(@name, done)->
     @mongoUri = process.env.MONGOLAB_URI or process.env.MONGOHQ_URL or "mongodb://localhost/todos_db"
 
     MongoDatabase.connect @mongoUri, (err, @db)=>
@@ -14,6 +14,8 @@ module.exports = class Database
         console.log "Connected to todos_db database"
       else
         console.log "An error ocurred: #{err}"
+
+      done @
 
   all:(callback)->
     @db.collection @name, strict:true, (err, collection)=>

@@ -1,9 +1,11 @@
 express = require "express"
+
+Database = require "./database"
 todos = require "./todos"
 
 app = null
 
-exports.start = ->
+exports.start = (done) ->
   app = express()
 
   app.set "title", "TodoMVC"
@@ -28,6 +30,10 @@ exports.start = ->
 
   app.listen 3000
   console.log "JSON REST Api running on port 3000"
+
+  new Database 'todos', (db)->
+    todos.set_db db
+    done()
 
 exports.close = ->
   app.close()
