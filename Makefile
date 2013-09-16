@@ -107,11 +107,11 @@ test.sauce.connect.run:
 # building
 test.build.prod:
 	@echo 'Building app before testing..'
-	@$(POLVO) -rb test/fixtures/todo > /dev/null
+	@$(POLVO) -rb test/fixtures/app > /dev/null
 
 test.build.split:
 	@echo 'Compiling app before testing..'
-	@$(POLVO) -cxb test/fixtures/todo > /dev/null
+	@$(POLVO) -cxb test/fixtures/app > /dev/null
 
 
 
@@ -122,7 +122,7 @@ test.cover.normalize:
 		test/coverage/lcov.info
 
 test.cover.publish:
-	@cd test/fixtures/todo/public/__split__/ && \
+	@cd test/fixtures/app/public/__split__/ && \
 		cat ../../../../coverage/lcov.info | \
 		../../../../../$(COVERALLS)
 	

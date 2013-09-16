@@ -3,6 +3,6 @@ bower_components
 
 test/coverage
 test/services
-test/fixtures/todo/public/__split__
-test/fixtures/todo/public/app.css
-test/fixtures/todo/public/app.js
+test/fixtures/app/public/__split__
+test/fixtures/app/public/app.css
+test/fixtures/app/public/app.js
