@@ -35,12 +35,14 @@ sauce_conf =
   pwd: process.env.SAUCE_ACCESS_KEY
 
 
-# starts server
-server.start coverage
-
-
 # mounting suites
 # ------------------------------------------------------------------------------
+
+before (done)->
+  # starts server
+  server.start coverage, ->
+    console.log '\n\n'
+    done()
 
 # 1st root test suite - based on env
 describe "[#{env}]", ->
@@ -55,8 +57,10 @@ describe "[#{env}]", ->
     if env is 'local'
 
       # ignores platform and browser version
-      caps.platform = null
-      caps.version = null
+      caps.platform = caps.version = caps['record-video'] = null
+      delete caps.platform
+      delete caps.version
+      delete caps['record-video']
 
     # 2nd root suite - based on browser
     describe "[#{caps.name}]", ->

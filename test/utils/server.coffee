@@ -15,7 +15,7 @@ matcher = (req)->
     parsed = url.parse req.url
     return parsed.pathname.match /lib\/index\.js/
 
-exports.start = (coverage)->
+exports.start = (coverage, done)->
   if coverage
     istanbul.hookLoader __dirname, verbose: true
 
@@ -38,6 +38,8 @@ exports.start = (coverage)->
   app.use app.router
   app.listen 8080
   console.log "Todo app running on port 8080"
+
+  api.start done
 
 exports.close = ->
   app?.close()
