@@ -12,29 +12,29 @@ exports.test = ( browser, pass, timeout )->
           should.not.exist err
           done()
 
-    describe '[js-injection]', ->
+    # describe '[js-injection]', ->
 
-      it 'should execute async method on model', (done)->
+    #   it 'should execute async method on model', (done)->
 
-        code = coffee.compile """
-          # getting model
-          Model = require '../../../lib/index'
+    #     code = coffee.compile """
+    #       # getting model
+    #       Model = require '../../../lib/index'
 
-          # striping params and done callback
-          [a, b, done] = arguments
+    #       # striping params and done callback
+    #       [a, b, done] = arguments
           
-          # executes method, passing params and firing callback 
-          Model.blabla a, b, done
-          Model.blabla a, b, -> done()
-        """, bare: on
+    #       # executes method, passing params and firing callback 
+    #       Model.blabla a, b, done
+    #       Model.blabla a, b, -> done()
+    #     """, bare: on
 
-        browser.executeAsync code, ['AA', 'BB'], (err, res)->
-          should.not.exist err
-          # res.should.be.equal ???
+    #     browser.executeAsync code, ['AA', 'BB'], (err, res)->
+    #       should.not.exist err
+    #       # res.should.be.equal ???
 
-          console.log '==============='
-          console.log 'err', err
-          console.log 'res', res
-          console.log '==============='
+    #       console.log '==============='
+    #       console.log 'err', err
+    #       console.log 'res', res
+    #       console.log '==============='
 
-          done()
+    #       done()
