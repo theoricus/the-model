@@ -6,7 +6,7 @@ istanbul = require 'istanbul-middleware'
 
 api = require '../fixtures/api'
 
-root = path.join __dirname, '..', 'fixtures', 'todo', 'public'
+root = path.join __dirname, '..', 'fixtures', 'app', 'public'
 index = path.join root, 'index.html'
 
 app = null
