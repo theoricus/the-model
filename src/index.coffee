@@ -1,7 +1,7 @@
 _ = require 'lodash'
 $ = require '../bower_components/jquery/jquery'
 
-module.exports = class Model
+class Model
 
   @_config  = urls: {}, keys: {}
   @_records = []
@@ -9,7 +9,6 @@ module.exports = class Model
 
   cid   : null
   _keys: null
-
 
 
   ### --------------------------------------------------------------------------
@@ -230,3 +229,11 @@ module.exports = class Model
 
     # return request obj to be listened / handled
     return $.ajax req
+
+# exporting
+if exports and module and module.exports
+  module.exports = Model
+else if define and define.amd
+  define -> Model
+else if window
+  (window.the or= {}).model = Model
