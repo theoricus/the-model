@@ -1,0 +1,22 @@
+section.todoapp
+
+  include partials/_header
+
+  section#main
+
+    input#toggle-all(type="checkbox")
+    label(for="toggle-all") Mark all as complete
+
+    ul#todo-list
+    - for (var x = 0; x < 3; x++)
+      li
+        include partials/_item
+
+  include partials/_footer
+
+  footer#info
+    p Double-click to edit a todo
+    p Written by
+      a(href="#") Giulian Drimba
+    p Part of
+      a(href="#") TodoMVC
