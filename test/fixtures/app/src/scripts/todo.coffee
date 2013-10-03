@@ -1,4 +1,4 @@
-Model = require '../../../../../src/index'
+Model = require "../../../../.."
 
 class Todo extends Model
 
