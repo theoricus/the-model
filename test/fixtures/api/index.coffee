@@ -37,3 +37,6 @@ exports.start = (done) ->
 
 exports.close = ->
   app.close()
+
+if /--autoinit/.test process.argv.join(' ')
+  module.exports.start()

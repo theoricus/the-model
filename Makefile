@@ -73,7 +73,7 @@ install_test_suite:
 	@curl -o test/services/chromedriver.zip \
 		https://chromedriver.googlecode.com/files/chromedriver_mac32_2.3.zip
 	@echo 'Done.'
-	
+
 	@echo '-----'
 	@echo 'Unzipping chromedriver..'
 	@cd test/services/; unzip chromedriver.zip; \
@@ -84,14 +84,14 @@ install_test_suite:
 	@echo 'Downloading Sauce Connect..'
 	@curl -o test/services/sauceconnect.zip \
 		http://saucelabs.com/downloads/Sauce-Connect-latest.zip
-	
+
 	@echo '-----'
 	@echo 'Unzipping Sauce Connect..'
 	@cd test/services/; unzip sauceconnect.zip; \
 		rm NOTICE.txt license.html sauceconnect.zip; cd -
 	@echo '-----'
 	@echo 'Done.'
-	@echo 
+	@echo
 
 
 
@@ -101,8 +101,6 @@ test.selenium.run:
 
 test.sauce.connect.run:
 	@java -jar $(SAUCE_CONNECT) $(SAUCE_USERNAME) $(SAUCE_ACCESS_KEY)
-
-
 
 # building
 test.build.prod:
@@ -125,10 +123,14 @@ test.cover.publish:
 	@cd test/fixtures/app/public/__split__/ && \
 		cat ../../../../coverage/lcov.info | \
 		../../../../../$(COVERALLS)
-	
+
 	@cd ../../../../..
 
+test.api.run:
+	@cd test/fixtures/api; ../../../$(CS) index.coffee --autoinit
 
+test.app.run:
+	@cd test/fixtures/app; ../../../$(POLVO) -ws
 
 # local
 test: test.build.prod

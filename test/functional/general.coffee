@@ -22,8 +22,8 @@ exports.test = ( browser, pass, timeout )->
 
     #       # striping params and done callback
     #       [a, b, done] = arguments
-          
-    #       # executes method, passing params and firing callback 
+
+    #       # executes method, passing params and firing callback
     #       Model.blabla a, b, done
     #       Model.blabla a, b, -> done()
     #     """, bare: on
