@@ -1,7 +1,8 @@
 _ = require 'lodash'
 $ = require '../bower_components/jquery/jquery'
+MicroEvent = require "./microevent"
 
-class Model
+class Model extends MicroEvent
 
   @_config  = urls: {}, keys: {}
   @_records = []
@@ -25,6 +26,8 @@ class Model
       @_config.keys[key] = type
 
     @id = config.id if config.id
+
+    @extend new MicroEvent
 
 
   ### --------------------------------------------------------------------------
@@ -101,6 +104,7 @@ class Model
         keys[k] = v
       else
         record[k] = v
+
     if props[@id]
       keys.id = props[@id]
 
@@ -114,12 +118,17 @@ class Model
 
     # returns created model if callback isn't specified
     unless callback?
-      return (@_create props)
+      record = (@_create props)
+      @emit "create", record
+      @emit "change", record
+      return record
 
     # sends request to server and handles response
     req = @fetch @_config.urls.create, 'POST', keys
     req.done (data)=>
       record = @_create props
+      @emit "create", record
+      @emit "change", record
       callback record, data, null
     req.error (error)-> callback record, null, error
 
@@ -129,7 +138,8 @@ class Model
 
     @_last_action = "read"
 
-    return found unless callback?
+    unless callback?
+      return found
 
     # sends request to server and handles response
     req = @fetch (@_config.urls.read.replace /(\:\w+)/, found?.id or id), 'GET'
@@ -143,12 +153,18 @@ class Model
   update:(keys, callback)->
     @set keys
     @constructor._last_action = "update"
-    return keys unless callback?
+    unless callback?
+      @emit "update"
+      @emit "change"
+      return keys
 
     # sends request to server and handles response
     url = @constructor._config.urls.update.replace /(\:\w+)/, @id
     req = @constructor.fetch url, 'PUT', keys
-    req.done (data)=> callback @, data, null
+    req.done (data)=>
+      @emit "update"
+      @emit "change"
+      callback @, data, null
     req.error (error)=> callback @, null, error
 
 
@@ -158,12 +174,18 @@ class Model
 
     @constructor._last_action = "delete"
 
-    return true unless callback?
+    unless callback?
+      @emit "change"
+      @emit "delete"
+      return true
 
     # sends request to server and handles response
     url = @constructor._config.urls.delete.replace /(\:\w+)/, @id
     req = @constructor.fetch url, 'DELETE'
-    req.done (data)=> callback true, data, null
+    req.done (data)=>
+      @emit "change"
+      @emit "delete"
+      callback true, data, null
     req.error (error)=> callback false, null, error
 
 
@@ -177,7 +199,7 @@ class Model
     req.done (data)=>
 
       for keys in ([].concat data)
-        found = _.find @_records, {id:keys.id}
+        found = _.find @_records, {id:keys[@id]}
         unless found
           @create keys
         else
