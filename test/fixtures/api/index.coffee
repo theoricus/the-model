@@ -33,7 +33,7 @@ exports.start = (done) ->
 
   new Database 'todos', (db)->
     todos.set_db db
-    done()
+    done?()
 
 exports.close = ->
   app.close()

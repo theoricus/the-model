@@ -14,11 +14,11 @@ general_handler = (res, err)->
 exports.set_db = (database)-> db = database
 
 exports.all = (req, res)->
-  db.all (res, err)->
+  db.all (data, err)->
     unless err
       for item in res
         item.id = item._id
-      res.send res
+      res.send data
     else
       res.send err
 
