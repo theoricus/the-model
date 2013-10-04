@@ -1,12 +1,17 @@
 $ = require "../../../../../bower_components/jquery/jquery.js"
 Template = require "../templates/app.jade"
+TemplateItem = require "../templates/item.jade"
 Todo = require "./todo"
 
 class App
 
   constructor:()->
 
-    @render()
+    Todo.on "create", @create
+    $("body").append Template()
+    @setup()
+
+    @fetch()
 
   setup:()->
 
@@ -16,21 +21,30 @@ class App
     @footer = @el.find("#footer")
     @main = @el.find("#main")
     @list = @el.find("#todo-list")
+    @new = @el.find "#new-todo"
 
     @events()
 
   events:()->
-    @list.find("li").bind "dblclick", @edit
+    @new.bind "keypress", @add
 
-  render:()->
 
-    Todo.all (todo, raw, err)=>
-      unless err
-        $("body").append Template "todos":todo
-        @setup()
+  fetch:()->
+
+    Todo.all (todos, raw, err)=>
+
+  render:(todos)->
+    $("body").empty()
+    @setup()
+
+  add:(e)=>
+    console.log "code"
+    code = e.keyCode || e.which
+    if code is 13
+      if $(e.currentTarget).val().length
+        Todo.create "title":$(e.currentTarget).val(), "done":"false"
 
   edit:(e)=>
-
     li = $ e.currentTarget
     @edit_item li
 
@@ -48,6 +62,11 @@ class App
   save_item:(li)->
     li.find(".edit").css "display":"none"
     li.find(".view").css "display":"block"
+
+  create:(item)=>
+    dom = $(TemplateItem item.keys)
+    dom.bind "dblclick", @edit
+    @list.append dom
 
 
 new App

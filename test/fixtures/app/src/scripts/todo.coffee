@@ -13,6 +13,7 @@ class Todo extends Model
 
     keys:
       "title":String
+      "done":String
 
     id:"_id"
 
