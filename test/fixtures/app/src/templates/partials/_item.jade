@@ -1,6 +1,6 @@
 .view
-  input.toggle(type="checkbox" #{checked})
-  label #{title}
+  input.toggle(type="checkbox", #{todo.keys.done})
+  label #{todo.keys.title}
   button.destroy
-input.edit(value="#{title}")
+input.edit(value="#{todo.keys.title}")
 

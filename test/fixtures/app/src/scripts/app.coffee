@@ -6,10 +6,10 @@ class App
 
   constructor:()->
 
-    # @render()
-    # @el = $(".todoapp")
+    @render()
+    @el = $(".todoapp")
 
-    # @setup()
+    @setup()
 
   setup:()->
 
@@ -21,7 +21,8 @@ class App
 
   render:()->
 
-    Todo.all ()->
-      console.log "teste"
+    Todo.all (todo, raw, err)->
+      unless err
+        $("body").append Template "todos":todo
 
 new App

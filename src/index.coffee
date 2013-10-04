@@ -8,7 +8,7 @@ class Model
   @_last_action:null
 
   cid   : null
-  _keys: null
+  keys: null
 
 
   ### --------------------------------------------------------------------------
@@ -18,7 +18,7 @@ class Model
     # configure urls ending points
     for method, i in ["create", "read", "update", "delete", "all", "find"]
       if (url = config.urls[method])?
-        @_config.urls[method] = url 
+        @_config.urls[method] = url
 
     # configure keys and types
     for key, type of config.keys
@@ -30,7 +30,7 @@ class Model
   -------------------------------------------------------------------------- ###
 
   _init:(dict)->
-    @_keys = {}
+    @keys = {}
     @cid = @_guid()
     @set dict
 
@@ -49,6 +49,7 @@ class Model
       switch ("#{checker}".match /function\s(\w+)/)[1]
         when 'String' then return (typeof val is 'string')
         when 'Number' then return (typeof val is 'number')
+        when 'Boolean' then return (typeof val is 'boolean')
         else return (val instanceof type)
 
     # validates against the given method
@@ -60,7 +61,7 @@ class Model
     Getter / Setter
   -------------------------------------------------------------------------- ###
   get:(keyumn)->
-    return @_keys[keyumn]
+    return @keys[keyumn]
 
   # set 'prop', 'val'
   # set prop: 'val', prop2: 'val2'
@@ -80,7 +81,7 @@ class Model
     key = args[0]
     val = args[1]
     if @validate key, val
-      return @_keys[key] = val
+      return @keys[key] = val
     else
       throw new Error "Invalid type for keyumn '#{key}' = #{val}"
 
@@ -98,7 +99,7 @@ class Model
         keys[k] = v
       else
         record[k] = v
-  
+
     record._init keys
     @_records.push record
     record
@@ -113,7 +114,7 @@ class Model
 
     # sends request to server and handles response
     req = @fetch @_config.urls.create, 'POST', keys
-    req.done (data)=> 
+    req.done (data)=>
       record = @_create props
       callback record, data, null
     req.error (error)-> callback record, null, error
@@ -128,10 +129,10 @@ class Model
 
     # sends request to server and handles response
     req = @fetch (@_config.urls.read.replace /(\:\w+)/, found?.id or id), 'GET'
-    req.done (data)-> 
+    req.done (data)->
       record = found.update(data) || (@create data)
       callback record, data, null
-    req.error (error)-> 
+    req.error (error)->
       callback found, null, error
 
 
@@ -185,7 +186,7 @@ class Model
   @find:( keys )->
     # returns local version
     if typeof keys is "object"
-      keys = {_keys:keys}
+      keys = {keys:keys}
       return _.where @_records, keys
     else
       return _.where @_records, {id:keys}
@@ -195,19 +196,19 @@ class Model
 
     done = (data)-> callback?(data, null)
     error = (error)-> callback?(null, error)
-    
+
     switch @constructor._last_action
 
       when "create"
         url = @constructor._config.urls.create
-        req = @constructor.fetch url, 'POST', @_keys
+        req = @constructor.fetch url, 'POST', @keys
         req.done (data)=>
           @update data
           done data
         req.error error
       when "update"
         url = @constructor._config.urls.update.replace /(\:\w+)/, @id
-        req = @constructor.fetch url, 'PUT', @_keys
+        req = @constructor.fetch url, 'PUT', @keys
         req.done done
         req.error error
       when "delete"
@@ -223,7 +224,7 @@ class Model
 
   @fetch:( url, type, data )->
     req = {url, type, data}
-    
+
     # sets dataType to json if url ends .json
     req.dataType = 'json'
 

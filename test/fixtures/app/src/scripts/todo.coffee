@@ -13,6 +13,5 @@ class Todo extends Model
 
     keys:
       "title":String
-      "completed":Boolean
 
 module.exports = Todo

@@ -8,7 +8,7 @@ section.todoapp
     label(for="toggle-all") Mark all as complete
 
     ul#todo-list
-    - for (var x = 0; x < 3; x++)
+    each todo in todos
       li
         include partials/_item
 
