@@ -9,7 +9,7 @@ class Model
 
   cid   : null
   keys: null
-
+  id:"id"
 
   ### --------------------------------------------------------------------------
     Configures model
@@ -23,6 +23,8 @@ class Model
     # configure keys and types
     for key, type of config.keys
       @_config.keys[key] = type
+
+    @id = config.id if config.id
 
 
   ### --------------------------------------------------------------------------
@@ -99,6 +101,8 @@ class Model
         keys[k] = v
       else
         record[k] = v
+    if props[@id]
+      keys.id = props[@id]
 
     record._init keys
     @_records.push record

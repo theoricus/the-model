@@ -14,4 +14,6 @@ class Todo extends Model
     keys:
       "title":String
 
+    id:"_id"
+
 module.exports = Todo
