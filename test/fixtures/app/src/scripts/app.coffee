@@ -7,7 +7,7 @@ class App
   constructor:()->
 
     @render()
-    @el = $(".todoapp")
+    @el = $("#todoapp")
 
     @setup()
 
