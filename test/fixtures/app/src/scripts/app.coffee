@@ -40,10 +40,18 @@ class App
 
     dom = $(TemplateItem item)
 
+    dom.bind "click", @reset_list
     dom.find("label").bind "dblclick", @edit_title
     dom.find(".toggle").bind "click", @edit_done
+    dom.find(".destroy").bind "click", @delete_item
 
     @list.append dom
+
+  reset_list:(e)=>
+
+    lis = @list.find("li")
+
+    @update_item $(li) for li in lis
 
   add_todo:(e)=>
     code = e.keyCode || e.which
@@ -53,6 +61,12 @@ class App
       if $(e.currentTarget).val().length
 
         Todo.create "title":$(e.currentTarget).val(), "done":"false"
+
+  delete_item:(e)=>
+    li = $($(e.currentTarget).parent().parent())
+    item = Todo.read(li.data("id"))
+    item.delete()
+    li.remove()
 
   edit_done:(e)=>
     li = $($(e.currentTarget).parent().parent())
