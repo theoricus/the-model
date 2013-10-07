@@ -39,19 +39,24 @@ class App
   create:(item)=>
 
     dom = $(TemplateItem item)
-
-    dom.bind "click", @reset_list
+    dom.attr("data-edit", false)
     dom.find("label").bind "dblclick", @edit_title
     dom.find(".toggle").bind "click", @edit_done
     dom.find(".destroy").bind "click", @delete_item
+    dom.bind "click", @reset_list
 
     @list.append dom
 
   reset_list:(e)=>
+    li_dom = $(e.currentTarget)
+
+    return if li_dom.attr("data-edit") is "true"
 
     lis = @list.find("li")
 
-    @update_item $(li) for li in lis
+    for li in lis
+      if $(li).attr("data-edit") is "true"
+        @update_item $(li)
 
   add_todo:(e)=>
     code = e.keyCode || e.which
@@ -71,9 +76,11 @@ class App
   edit_done:(e)=>
     li = $($(e.currentTarget).parent().parent())
     @update_item li
+    li.attr("data-edit", true)
 
   edit_title:(e)=>
     li = $($(e.currentTarget).parent().parent())
+    li.attr("data-edit", true)
 
     li.find(".view").css "display":"none"
     li.find(".edit").css "display":"block"
@@ -94,6 +101,7 @@ class App
     li.find(".view").css "display":"block"
     $("##{item.id}").find(".edit").val(item.get("title"))
     $("##{item.id}").find(".view").find("label").text(item.get("title"))
+    li.attr("data-edit", false)
 
 
 
