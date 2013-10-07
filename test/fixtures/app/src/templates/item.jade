@@ -1,7 +1,7 @@
-li
+li(data-id="#{id}", id="#{id}")
   .view(data-id="#{id}")
     input.toggle(type="checkbox", #{todo.keys.done})
-    label #{title}
+    label #{keys.title}
     button.destroy
-  input.edit(value="#{title}")
+  input.edit(value="#{keys.title}")
 

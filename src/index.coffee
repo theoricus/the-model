@@ -154,8 +154,8 @@ class Model extends MicroEvent
     @set keys
     @constructor._last_action = "update"
     unless callback?
-      @emit "update"
-      @emit "change"
+      @emit "update", @
+      @emit "change", @
       return keys
 
     # sends request to server and handles response
@@ -175,8 +175,8 @@ class Model extends MicroEvent
     @constructor._last_action = "delete"
 
     unless callback?
-      @emit "change"
-      @emit "delete"
+      @emit "change", @
+      @emit "delete", @
       return true
 
     # sends request to server and handles response

@@ -26,8 +26,7 @@ class App
     @events()
 
   events:()->
-    @new.bind "keypress", @add
-
+    @new.bind "keypress", @add_todo
 
   fetch:()->
 
@@ -37,18 +36,31 @@ class App
     $("body").empty()
     @setup()
 
-  add:(e)=>
-    console.log "code"
+  create:(item)=>
+
+    dom = $(TemplateItem item)
+
+    dom.find("label").bind "dblclick", @edit_title
+    dom.find(".toggle").bind "click", @edit_done
+
+    @list.append dom
+
+  add_todo:(e)=>
     code = e.keyCode || e.which
+
     if code is 13
+
       if $(e.currentTarget).val().length
+
         Todo.create "title":$(e.currentTarget).val(), "done":"false"
 
-  edit:(e)=>
-    li = $ e.currentTarget
-    @edit_item li
+  edit_done:(e)=>
+    li = $($(e.currentTarget).parent().parent())
+    @update_item li
 
-  edit_item:(li)->
+  edit_title:(e)=>
+    li = $($(e.currentTarget).parent().parent())
+
     li.find(".view").css "display":"none"
     li.find(".edit").css "display":"block"
     li.find(".edit").focus()
@@ -57,16 +69,18 @@ class App
       code = e.keyCode || e.which
       if code is 13
         $(e.currentTarget).unbind "keypress"
-        @save_item li
+        @update_item li
 
-  save_item:(li)->
+  update_item:(li)->
+    item = Todo.read(li.data("id"))
+    checked = li.find(".toggle").is(":checked")
+    item.update "title":li.find(".edit").val(), "done":"#{checked}"
+
     li.find(".edit").css "display":"none"
     li.find(".view").css "display":"block"
+    $("##{item.id}").find(".edit").val(item.get("title"))
+    $("##{item.id}").find(".view").find("label").text(item.get("title"))
 
-  create:(item)=>
-    dom = $(TemplateItem item.keys)
-    dom.bind "dblclick", @edit
-    @list.append dom
 
 
 new App
