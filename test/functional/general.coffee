@@ -14,19 +14,17 @@ exports.test = ( browser, pass, timeout )->
 
     describe '[api]', ->
 
-      it 'should create a local item', (done)->
+        it '[CREATE] should create a local item', (done)->
 
-        browser.get "http://localhost:8080/", ()->
+          browser.get "http://localhost:8080/", ()->
 
-          todo_title = "new todo"
+            todo_title = "new todo"
 
-          browser.elementById 'new-todo', (err, el) ->
+            browser.elementById 'new-todo', (err, el) ->
 
-            browser.type el, todo_title, (err)->
+              browser.type el, todo_title, (err)->
 
-              browser.type el, SPECIAL_KEYS['Enter'], (err)->
-
-                browser.elementByCssSelector "#id label", (err, el)->
+                browser.type el, SPECIAL_KEYS['Enter'], (err)->
 
                   browser.eval "window.Todo.read(0).get('title')", (err, title)->
 
@@ -34,3 +32,5 @@ exports.test = ( browser, pass, timeout )->
                     should.equal title, todo_title
 
                     done()
+
+
