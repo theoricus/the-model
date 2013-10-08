@@ -12,7 +12,8 @@ module.exports = class Database
     MongoDatabase.connect @mongoUri, (err, @db)=>
       unless err
         console.log "Connected to todos_db database"
-        collection = @db.collection("todos")
+        @db.createCollection "todos", ()->
+
       else
         console.log "An error ocurred: #{err}"
 
