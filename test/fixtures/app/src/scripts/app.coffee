@@ -1,3 +1,4 @@
+Model = require "../../../../.."
 $ = require "../../../../../bower_components/jquery/jquery.js"
 Template = require "../templates/app.jade"
 TemplateItem = require "../templates/item.jade"

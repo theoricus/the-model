@@ -17,4 +17,5 @@ class Todo extends Model
 
     id:"_id"
 
+window.Todo = Todo if window
 module.exports = Todo
