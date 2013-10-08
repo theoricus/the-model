@@ -1,5 +1,5 @@
 should = do (require 'chai').should
-
+SPECIAL_KEYS = require "wd/lib/special-keys"
 coffee = require 'coffee-script'
 
 exports.test = ( browser, pass, timeout )->
@@ -12,29 +12,25 @@ exports.test = ( browser, pass, timeout )->
           should.not.exist err
           done()
 
-    # describe '[js-injection]', ->
+    describe '[api]', ->
 
-    #   it 'should execute async method on model', (done)->
+      it 'should create a local item', (done)->
 
-    #     code = coffee.compile """
-    #       # getting model
-    #       Model = require '../../../lib/index'
+        browser.get "http://localhost:8080/", ()->
 
-    #       # striping params and done callback
-    #       [a, b, done] = arguments
+          todo_title = "new todo"
 
-    #       # executes method, passing params and firing callback
-    #       Model.blabla a, b, done
-    #       Model.blabla a, b, -> done()
-    #     """, bare: on
+          browser.elementById 'new-todo', (err, el) ->
 
-    #     browser.executeAsync code, ['AA', 'BB'], (err, res)->
-    #       should.not.exist err
-    #       # res.should.be.equal ???
+            browser.type el, todo_title, (err)->
 
-    #       console.log '==============='
-    #       console.log 'err', err
-    #       console.log 'res', res
-    #       console.log '==============='
+              browser.type el, SPECIAL_KEYS['Enter'], (err)->
 
-    #       done()
+                browser.elementByCssSelector "#id label", (err, el)->
+
+                  browser.eval "window.Todo.read(0).get('title')", (err, title)->
+
+                    should.not.exist err
+                    should.equal title, todo_title
+
+                    done()
