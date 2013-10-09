@@ -16,8 +16,6 @@ exports.test = ( browser, pass, timeout )->
 
         it '[CREATE] should create a local item', (done)->
 
-          browser.get "http://localhost:8080/", ()->
-
             todo_title = "new todo"
 
             browser.elementById 'new-todo', (err, el) ->
@@ -31,6 +29,8 @@ exports.test = ( browser, pass, timeout )->
                     should.not.exist err
                     should.equal title, todo_title
 
-                    done()
+                    done()      
+
+
 
 

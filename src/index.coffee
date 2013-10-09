@@ -1,8 +1,8 @@
 _ = require 'lodash'
 $ = require '../bower_components/jquery/jquery'
-MicroEvent = require "./microevent"
+Pivot = require "the-pivot"
 
-class Model extends MicroEvent
+class Model extends Pivot
 
   @_config  = urls: {}, keys: {}
   @_records = []
@@ -16,6 +16,7 @@ class Model extends MicroEvent
     Configures model
   -------------------------------------------------------------------------- ###
   @configure:( config )->
+
     # configure urls ending points
     for method, i in ["create", "read", "update", "delete", "all", "find"]
       if (url = config.urls[method])?
@@ -27,7 +28,7 @@ class Model extends MicroEvent
 
     @id = config.id if config.id
 
-    @extend new MicroEvent
+    @extend new Pivot
 
 
   ### --------------------------------------------------------------------------
@@ -119,16 +120,16 @@ class Model extends MicroEvent
     # returns created model if callback isn't specified
     unless callback?
       record = (@_create props)
-      @emit "create", record
-      @emit "change", record
+      @trigger "create", record
+      @trigger "change", record
       return record
 
     # sends request to server and handles response
     req = @fetch @_config.urls.create, 'POST', keys
     req.done (data)=>
       record = @_create props
-      @emit "create", record
-      @emit "change", record
+      @trigger "create", record
+      @trigger "change", record
       callback record, data, null
     req.error (error)-> callback record, null, error
 
@@ -154,16 +155,16 @@ class Model extends MicroEvent
     @set keys
     @constructor._last_action = "update"
     unless callback?
-      @emit "update", @
-      @emit "change", @
+      @trigger "update", @
+      @trigger "change", @
       return keys
 
     # sends request to server and handles response
     url = @constructor._config.urls.update.replace /(\:\w+)/, @id
     req = @constructor.fetch url, 'PUT', keys
     req.done (data)=>
-      @emit "update"
-      @emit "change"
+      @trigger "update"
+      @trigger "change"
       callback @, data, null
     req.error (error)=> callback @, null, error
 
@@ -175,16 +176,16 @@ class Model extends MicroEvent
     @constructor._last_action = "delete"
 
     unless callback?
-      @emit "change", @
-      @emit "delete", @
+      @trigger "change", @
+      @trigger "delete", @
       return true
 
     # sends request to server and handles response
     url = @constructor._config.urls.delete.replace /(\:\w+)/, @id
     req = @constructor.fetch url, 'DELETE'
     req.done (data)=>
-      @emit "change"
-      @emit "delete"
+      @trigger "change"
+      @trigger "delete"
       callback true, data, null
     req.error (error)=> callback false, null, error
 
