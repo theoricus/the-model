@@ -77,9 +77,10 @@ class Model extends Pivot
     if args.length is 1
       dict = args[0]
       for key, val of dict
+        console.log @constructor.id, key
         if @constructor._config.keys[key]
           @set key, val
-        else
+        else if key isnt @constructor.id
           @[key] = val
       return dict
 
@@ -125,13 +126,13 @@ class Model extends Pivot
       return record
 
     # sends request to server and handles response
-    req = @fetch @_config.urls.create, 'POST', keys
+    req = @fetch @_config.urls.create, 'POST', props
     req.done (data)=>
-      record = @_create props
+      record = @_create data
       @trigger "create", record
       @trigger "change", record
-      callback record, data, null
-    req.error (error)-> callback record, null, error
+      callback record, null
+    req.error (error)-> callback null, error
 
 
   @read:(id, callback)->
@@ -143,30 +144,31 @@ class Model extends Pivot
       return found
 
     # sends request to server and handles response
-    req = @fetch (@_config.urls.read.replace /(\:\w+)/, found?.id or id), 'GET'
+    req = @fetch (@_config.urls.read.replace /(\:\w+)$/, found?.id or id), 'GET'
     req.done (data)->
       record = found.update(data) || (@create data)
-      callback record, data, null
+      callback record, null
     req.error (error)->
-      callback found, null, error
+      callback null, error
 
 
   update:(keys, callback)->
     @set keys
     @constructor._last_action = "update"
+
     unless callback?
       @trigger "update", @
       @trigger "change", @
-      return keys
+      return @
 
     # sends request to server and handles response
-    url = @constructor._config.urls.update.replace /(\:\w+)/, @id
+    url = @constructor._config.urls.update.replace /(\:\w+)$/, @id
     req = @constructor.fetch url, 'PUT', keys
     req.done (data)=>
       @trigger "update"
       @trigger "change"
-      callback @, data, null
-    req.error (error)=> callback @, null, error
+      callback @, null
+    req.error (error)=> callback null, error
 
 
   delete:(callback)->
@@ -181,7 +183,7 @@ class Model extends Pivot
       return true
 
     # sends request to server and handles response
-    url = @constructor._config.urls.delete.replace /(\:\w+)/, @id
+    url = @constructor._config.urls.delete.replace /(\:\w+)$/, @id
     req = @constructor.fetch url, 'DELETE'
     req.done (data)=>
       @trigger "change"
@@ -239,12 +241,12 @@ class Model extends Pivot
           done data
         req.error error
       when "update"
-        url = @constructor._config.urls.update.replace /(\:\w+)/, @id
+        url = @constructor._config.urls.update.replace /(\:\w+)$/, @id
         req = @constructor.fetch url, 'PUT', @keys
         req.done done
         req.error error
       when "delete"
-        url = @constructor._config.urls.delete.replace /(\:\w+)/, @id
+        url = @constructor._config.urls.delete.replace /(\:\w+)$/, @id
         req = @constructor.fetch url, 'DELETE'
         req.done done
         req.error error

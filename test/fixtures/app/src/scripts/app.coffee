@@ -17,7 +17,7 @@ class App
   setup:()->
 
     @el = $("#todoapp")
-    @all_checkbox = @el.find("#toggle-all")[0];
+    @all_checkbox = @el.find("#toggle-all")[0]
     @input = @el.find("#new-todo")
     @footer = @el.find("#footer")
     @main = @el.find("#main")
@@ -66,7 +66,18 @@ class App
 
       if $(e.currentTarget).val().length
 
-        Todo.create "title":$(e.currentTarget).val(), "done":false
+        unless window.remote
+          Todo.create "title":$(e.currentTarget).val(), "done":false
+        else
+
+          Todo.create {"title":$(e.currentTarget).val(), "done":false}, (record, raw, error)->
+
+            console.log "record", record
+            console.log "raw", raw
+            console.log "error", error
+
+
+
 
   delete_item:(e)=>
     li = $($(e.currentTarget).parent().parent())
@@ -96,7 +107,14 @@ class App
   update_item:(li)->
     item = Todo.read(li.data("id"))
     checked = li.find(".toggle").is(":checked")
-    item.update "title":li.find(".edit").val(), "done":checked
+
+    unless window.remote
+      item.update "title":li.find(".edit").val(), "done":checked
+    else
+      item.update "title":li.find(".edit").val(), "done":checked, (record, raw, err)->
+        console.log "record", record
+        console.log "raw", raw
+        console.log "error", error
 
     li.find(".edit").css "display":"none"
     li.find(".view").css "display":"block"
