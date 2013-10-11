@@ -29,7 +29,9 @@ exports.test = ( browser, pass, timeout )->
                     should.not.exist err
                     should.equal title, todo_title
 
-                    done()
+                    done()      
+
+
 
         it '[UPDATE] should update a local item', (done)->
 
