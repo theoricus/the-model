@@ -4,12 +4,8 @@ BSON = mongo.BSONPure
 
 db = null
 
-general_handler = (res, err)->
-  unless err
-    res.id = res._id
-    res.send res
-  else
-    res.send err
+general_handler = (res, data)->
+    res.send data
 
 exports.set_db = (database)-> db = database
 
@@ -30,7 +26,16 @@ exports.read = (req, res)->
 
 exports.create = (req, res)->
   todo = req.body
-  db.create todo, general_handler
+
+  for key, value of todo
+    todo[key] = true if todo[key] is "true"
+    todo[key] = false if todo[key] is "false"
+
+  db.create todo, (data, err)=>
+    unless err
+      general_handler res, data
+    else
+      general_handler res, err
 
 exports.update = (req, res)->
   id = req.params.id
