@@ -16,7 +16,8 @@ exports.all = (req, res)->
         item.id = item._id
       res.send data
     else
-      res.send err
+      res.status 500
+      res.render('500', { error: err });
 
 exports.read = (req, res)->
   id = req.params.id
