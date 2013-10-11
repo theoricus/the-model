@@ -66,7 +66,7 @@ class App
 
       if $(e.currentTarget).val().length
 
-        Todo.create "title":$(e.currentTarget).val(), "done":"false"
+        Todo.create "title":$(e.currentTarget).val(), "done":false
 
   delete_item:(e)=>
     li = $($(e.currentTarget).parent().parent())
@@ -96,7 +96,7 @@ class App
   update_item:(li)->
     item = Todo.read(li.data("id"))
     checked = li.find(".toggle").is(":checked")
-    item.update "title":li.find(".edit").val(), "done":"#{checked}"
+    item.update "title":li.find(".edit").val(), "done":checked
 
     li.find(".edit").css "display":"none"
     li.find(".view").css "display":"block"

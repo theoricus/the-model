@@ -216,7 +216,12 @@ class Model extends Pivot
       keys = {keys:keys}
       return _.where @_records, keys
     else
-      return _.where @_records, {id:keys}
+      found = _.where @_records, {id:keys}
+
+      if found.length
+        return found
+      else
+        return _.where @_records, {cid:keys}
 
 
   save:( callback )=>

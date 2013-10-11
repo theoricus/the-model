@@ -14,7 +14,9 @@ exports.test = ( browser, pass, timeout )->
 
     describe '[api]', ->
 
-        it '[CREATE] should create a local item', (done)->
+      describe 'LOCAL', ->
+
+        it '[CREATE] should create an item', (done)->
 
             todo_title = "new todo"
 
@@ -29,36 +31,71 @@ exports.test = ( browser, pass, timeout )->
                     should.not.exist err
                     should.equal title, todo_title
 
-                    done()      
+                    done()
 
+        it '[READ] should read an item based on the CID', (done)->
 
+          browser.eval "window.Todo.read(0).cid", (err, cid)->
 
-        it '[UPDATE] should update a local item', (done)->
+            should.not.exist err
+            should.equal 0, 0
+
+            done()
+
+        it '[UPDATE] should update an item', (done)->
 
           updated_title = "updated todo"
 
-          browser.eval "window.Todo.read(0).cid", (err, id)->
+          browser.elementById 'id', (err, el) ->
 
-            browser.elementById 'id', (err, el) ->
+            el.doubleClick (err)->
 
-              el.doubleClick (err)->
+              browser.elementsByCssSelector "#id .toggle", (err, elements)->
 
-                browser.elementsByCssSelector "#id .toggle", (err, elements)->
+                el = elements[0]
 
-                  el = elements[0]
+                browser.clear el, (err)->
 
-                  browser.clear el, (err)->
+                  browser.type el, updated_title, (err)->
 
-                    browser.type el, updated_title, (err)->
+                    browser.type el, SPECIAL_KEYS['Enter'], (err)->
 
-                      browser.type el, SPECIAL_KEYS['Enter'], (err)->
+                      browser.eval "window.Todo.read(0).get('title')", (err, title)->
 
-                        browser.eval "window.Todo.read(0).get('title')", (err, title)->
+                        should.not.exist err
+                        should.equal title, updated_title
 
-                          should.not.exist err
-                          should.equal title, updated_title
+                        done()
 
-                          done()
+        it '[FIND] should find an item by an filter object', (done)->
+
+          browser.eval "window.Todo.find({title:'updated todo'}).length", (err, found)->
+
+            should.not.exist err
+            should.equal found, 1
+            done()
+
+        it '[FIND] should find an item by an ID or CID', (done)->
+
+          browser.eval "window.Todo.find(0).length", (err, found)->
+
+            should.not.exist err
+            should.equal found, 1
+            done()
+
+        it '[DELETE] should delete an item', (done)->
+
+          browser.elementsByCssSelector "#id .destroy", (err, elements)->
+
+            el = elements[0]
+
+            el.click (err)->
+
+              browser.eval "window.Todo.all().length", (err, size)->
+
+                should.not.exist err
+                should.equal 0, 0
+                done()
 
 
 
