@@ -23,7 +23,11 @@ exports.read = (req, res)->
   id = req.params.id
   console.log "Retrieving todo #{id}"
 
-  db.read id, general_handler
+  db.read id, (data, err)=>
+    unless err
+      general_handler res, data
+    else
+      general_handler res, err
 
 exports.create = (req, res)->
   todo = req.body
