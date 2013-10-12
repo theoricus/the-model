@@ -11,11 +11,7 @@ module.exports = class Database
 
     MongoDatabase.connect @mongoUri, (err, @db)=>
       unless err
-        console.log "Connected to todos_db database"
         @db.createCollection "todos", ()->
-
-      else
-        console.log "An error ocurred: #{err}"
 
       done @
 
@@ -29,7 +25,6 @@ module.exports = class Database
             callback items, null
           else
             callback null, {"error":"Couldn't retrive #{@name} collection"}
-            console.log "Couldn't retrive todos collection"
 
       else
         @_collection_access_error callback
@@ -43,7 +38,6 @@ module.exports = class Database
             callback item, null
           else
             callback null, {"error":"Todo not found: #{id}"}
-            console.log "Error retrieving todo #{id}"
 
       else
         @_collection_access_error callback
@@ -54,10 +48,8 @@ module.exports = class Database
       unless err
         collection.remove {"_id": new BSON.ObjectID(id)}, {safe:false}, (err, result)=>
           unless err
-            console.log "Todo deleted"
             callback {}, null
           else
-            console.log "Error deleting todo #{id}"
             callback null, {"error":"Couldn't delete todo #{id}"}
       else
         @_collection_access_error callback
@@ -70,10 +62,8 @@ module.exports = class Database
         collection.update "_id": new BSON.ObjectID(id), todo, safe:false, (err, result)=>
 
           unless err
-            console.log "#{result} document(s) updated"
             callback todo, null
           else
-            console.log "Error updating todo #{err}"
             callback null, {"error":"Error updating todo #{id}"}
       else
         @_collection_access_error callback
@@ -86,7 +76,6 @@ module.exports = class Database
         collection.insert todo, safe:false, (err, result)=>
 
           unless err
-            console.log "Success: #{JSON.stringify(result[0])}"
             callback result[0], null
           else
             callback null, {"error":"Couldn't create todo"}
@@ -95,5 +84,4 @@ module.exports = class Database
         @_collection_access_error callback
 
   _collection_access_error:(callback)->
-    console.log "Couldn't access #{@name} collection"
     callback null, {"error":"Couldn't connect to #{@name} collection"}

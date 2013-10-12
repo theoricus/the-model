@@ -49,10 +49,18 @@ exports.update = (req, res)->
   console.log "Updating todo #{id}"
   console.log (JSON.stringify todo)
 
-  db.update id, todo, general_handler
+  db.update id,todo, (data, err)=>
+    unless err
+      general_handler res, data
+    else
+      general_handler res, err
 
 exports.delete = (req, res)->
   id = req.params.id
   console.log "Deleting todo #{id}"
 
-  db.delete id, general_handler
+  db.delete id, (data, err)=>
+    unless err
+      general_handler res, data
+    else
+      general_handler res, err
