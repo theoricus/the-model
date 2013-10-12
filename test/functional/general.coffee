@@ -30,30 +30,56 @@ exports.test = ( browser, pass, timeout )->
                   should.equal title, todo_title
                   cb?()
 
-      update_todo = (cb)->
+      update_todo = (id, cb)->
 
         updated_title = "updated todo"
 
-        browser.elementById 'id', (err, el) ->
+        browser.elementById id, (err, el) ->
 
           el.doubleClick (err)->
 
-            browser.elementsByCssSelector "#id .toggle", (err, elements)->
+            browser.elementsByCssSelector "##{id} .edit", (err, elements)->
+
+              should.not.exist err
 
               el = elements[0]
 
               browser.clear el, (err)->
 
+                should.not.exist err
+
                 browser.type el, updated_title, (err)->
+
+                  should.not.exist err
 
                   browser.type el, SPECIAL_KEYS['Enter'], (err)->
 
-                    browser.eval "window.Todo.read(0).get('title')", (err, title)->
+                    should.not.exist err
+
+                    browser.eval "window.Todo.all().length", (err, length)->
 
                       should.not.exist err
-                      should.equal title, updated_title
+                      should.equal 1, length
 
-                      cb?()
+                      browser.eval "window.Todo.read(0).get('title')", (err, title)->
+
+                        should.not.exist err
+                        should.equal title, updated_title
+
+                        cb?()
+
+      delete_todo = (id, cb)->
+
+        browser.elementsByCssSelector "##{id} .destroy", (err, elements)->
+
+            el = elements[0]
+
+            el.click (err)->
+
+              browser.eval "window.Todo.all().length", (err, size)->
+
+                should.not.exist err
+                cb?()
 
       describe 'LOCAL', ->
 
@@ -73,7 +99,7 @@ exports.test = ( browser, pass, timeout )->
 
         it '[UPDATE] should update an item', (done)->
 
-          update_todo done
+            update_todo "todo_0", done
 
         it '[FIND] should find an item by an filter object', (done)->
 
@@ -83,7 +109,7 @@ exports.test = ( browser, pass, timeout )->
             should.equal found, 1
             done()
 
-        it '[FIND] should find an item by an ID or CID', (done)->
+        it '[FIND] should find an item by a CID', (done)->
 
           browser.eval "window.Todo.find(0).length", (err, found)->
 
@@ -93,69 +119,116 @@ exports.test = ( browser, pass, timeout )->
 
         it '[DELETE] should delete an item', (done)->
 
-          browser.elementsByCssSelector "#id .destroy", (err, elements)->
-
-            el = elements[0]
-
-            el.click (err)->
-
-              browser.eval "window.Todo.all().length", (err, size)->
-
-                should.not.exist err
-                should.equal 0, 0
-                done()
+          delete_todo "todo_0", done
 
       describe 'REMOTE', ->
+
+        record_id = null
 
         it '[CREATE] should create an item', (done)->
 
           browser.eval "window.remote = true", ()->
 
-          code = """
-            var done = arguments[0];
+          create_todo()
 
-            window.Todo.on('create',function(record)
-            {
-              done(record)
-            })
+          browser.waitForCondition "window.Todo.all().length > 0", (err, boolean)->
 
-          """
-
-          browser.executeAsync code, (err, result)->
-
-            console.log result
+            should.not.exist err
+            should.equal true, boolean
             done()
 
-          create_todo
 
         it '[READ] should read an item based on the ID', (done)->
 
-          browser.eval "window.Todo.read(0).id", (err, _id)->
+          browser.eval "window.remote = true", ()->
+
+            browser.eval "window.Todo.read(0).id", (err, id)->
+
+              should.not.exist err
+
+              record_id = id
+
+              console.log id
+
+              code = """
+                var done = arguments[1];
+                var id = arguments[0].toString();
+
+                window.Todo.read(id, function(record, err)
+                {
+                  done(record.id)
+                })
+              """
+
+              browser.executeAsync code, [record_id.toString()], (err, _id)->
+
+                should.not.exist err
+                should.equal record_id, _id
+
+                done()
+
+        it '[UPDATE] should update an item', (done)->
+
+          update_todo "todo_0", done
+
+        it '[FIND] should find an item by an ID', (done)->
+
+          browser.eval "window.Todo.find('#{record_id}').length", (err, found)->
 
             should.not.exist err
-            should.equal 0, 0
-
-            console.log _id, err
-
+            should.equal found, 1
             done()
 
-            # code = """
-            #   var done = arguments[1];
-            #   var id = arguments[0].toString();
+        it '[DELETE] should delete an item', (done)->
 
-            #   window.Todo.read(id, function(record, err)
-            #   {
-            #     done(record)
-            #   })
-            # """
+          delete_todo "todo_0", done
 
-            # browser.executeAsync code, [id.toString()], (err, _id)->
+      describe 'LOCAL AND REMOTE', ->
 
-            #   # should.not.exist err
-            #   console.log _id
-            #   # should.equal id, _id
+        save_todo=(cb)->
 
-            #   done()
+          code = """
+                var done = arguments[0];
+
+                window.todo.save(function(data, err)
+                {
+                  if( err )
+                    done(false)
+                  else
+                    done(true)
+                })
+              """
+
+          browser.executeAsync code, (err, saved)->
+
+                should.not.exist err
+                should.equal true, saved
+
+                cb?()
+
+        it '[CREATE] should create an item', (done)->
+
+          browser.eval "window.remote = false", ()->
+
+            create_todo ()->
+
+              save_todo done
+
+        it '[UPDATE] should update an item', (done)->
+
+          browser.eval "window.remote = false", ()->
+
+            update_todo "todo_0", ()->
+
+              save_todo done
+
+        it '[DELETE] should delete an item', (done)->
+
+          browser.eval "window.remote = false", ()->
+
+            delete_todo "todo_0", ()->
+
+              save_todo done
 
 
 

@@ -77,11 +77,12 @@ class Model extends Pivot
     if args.length is 1
       dict = args[0]
       for key, val of dict
-        console.log @constructor.id, key
         if @constructor._config.keys[key]
           @set key, val
         else if key isnt @constructor.id
           @[key] = val
+        else if key is @constructor.id
+          @["id"] = val
       return dict
 
     # otherwise set the given key / val
@@ -138,8 +139,6 @@ class Model extends Pivot
   @read:(id, callback)->
     found = ((_.find @_records, id:id) or (_.find @_records, cid:id))
 
-    @_last_action = "read"
-
     unless callback?
       return found
 
@@ -188,13 +187,12 @@ class Model extends Pivot
     req.done (data)=>
       @trigger "change"
       @trigger "delete"
-      callback true, data, null
-    req.error (error)=> callback false, null, error
+      callback true, null
+    req.error (error)=> callback false, error
 
 
   @all:( callback )->
     # returns local version if callback isn't specified
-    @_last_action = "all"
     return @_records unless callback?
 
     # sends request to server and handles response
@@ -227,6 +225,8 @@ class Model extends Pivot
 
 
   save:( callback )=>
+
+    console.log @constructor._last_action
 
     done = (data)-> callback?(data, null)
     error = (error)-> callback?(null, error)
