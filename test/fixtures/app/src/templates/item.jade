@@ -1,6 +1,9 @@
-li(data-id="#{id}", data-cid="#{cid}", id="#{id}")
+li(data-id="#{id}", data-cid="#{cid}", id="todo_#{cid}")
   .view(data-id="#{id}")
-    input.toggle(type="checkbox", #{todo.keys.done})
+    if keys.done
+      input.toggle(type="checkbox", checked="#{keys.done}")
+    else
+      input.toggle(type="checkbox")
     label #{keys.title}
     button.destroy
   input.edit(value="#{keys.title}")

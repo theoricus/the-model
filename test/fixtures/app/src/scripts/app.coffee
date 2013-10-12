@@ -39,6 +39,8 @@ class App
 
   create:(item)=>
 
+    window.todo = Todo.read(0);
+    
     dom = $(TemplateItem item)
     dom.attr("data-edit", false)
     dom.find("label").bind "dblclick", @edit_title
@@ -81,9 +83,14 @@ class App
 
   delete_item:(e)=>
     li = $($(e.currentTarget).parent().parent())
-    item = Todo.read(li.data("id"))
-    item.delete()
-    li.remove()
+    item = Todo.read(li.data("cid"))
+    unless window.remote
+      item.delete()
+      li.remove()
+    else
+      item.delete (deleted)->
+        li.remove() if deleted
+
 
   edit_done:(e)=>
     li = $($(e.currentTarget).parent().parent())
@@ -105,10 +112,11 @@ class App
         @update_item li
 
   update_item:(li)->
-    item = Todo.read(li.data("id"))
+    item = Todo.read(li.data("cid"))
     checked = li.find(".toggle").is(":checked")
 
     unless window.remote
+      console.log ("title":li.find(".edit").val(), "done":checked)
       item.update "title":li.find(".edit").val(), "done":checked
     else
       item.update "title":li.find(".edit").val(), "done":checked, (record, raw, err)->
@@ -118,8 +126,8 @@ class App
 
     li.find(".edit").css "display":"none"
     li.find(".view").css "display":"block"
-    $("##{item.id}").find(".edit").val(item.get("title"))
-    $("##{item.id}").find(".view").find("label").text(item.get("title"))
+    $("#todo_#{item.cid}").find(".edit").val(item.get("title"))
+    $("#todo_#{item.cid}").find(".view").find("label").text(item.get("title"))
     li.attr("data-edit", false)
 
 
