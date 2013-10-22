@@ -14,7 +14,14 @@ exports.test = ( browser, pass, timeout )->
 
     describe '[api]', ->
 
-      create_todo = (cb)->
+      get_title = (todo_title, cb)->
+        browser.eval "window.Todo.read(0).get('title')", (err, title)->
+
+          should.not.exist err
+          should.equal title, todo_title
+          cb?()
+
+      create_todo = (cb, remote)->
         todo_title = "new todo"
 
         browser.elementById 'new-todo', (err, el) ->
@@ -24,11 +31,13 @@ exports.test = ( browser, pass, timeout )->
 
               browser.type el, SPECIAL_KEYS['Enter'], (err)->
 
-                browser.eval "window.Todo.read(0).get('title')", (err, title)->
-
-                  should.not.exist err
-                  should.equal title, todo_title
-                  cb?()
+                if remote
+                  browser.waitForCondition "window.Todo.all().length > 0", (err, boolean)->
+                    should.not.exist err
+                    get_title todo_title, cb
+                else
+                  get_title todo_title, cb
+                    
 
       update_todo = (id, cb)->
 
@@ -129,13 +138,14 @@ exports.test = ( browser, pass, timeout )->
 
           browser.eval "window.remote = true", ()->
 
-          create_todo()
+          create_todo ()->
 
-          browser.waitForCondition "window.Todo.all().length > 0", (err, boolean)->
+            browser.waitForCondition "window.Todo.all().length > 0", (err, boolean)->
 
-            should.not.exist err
-            should.equal true, boolean
-            done()
+              should.not.exist err
+              console.log boolean
+              should.equal true, boolean
+              done()
 
 
         it '[READ] should read an item based on the ID', (done)->
@@ -147,8 +157,6 @@ exports.test = ( browser, pass, timeout )->
               should.not.exist err
 
               record_id = id
-
-              console.log id
 
               code = """
                 var done = arguments[1];
