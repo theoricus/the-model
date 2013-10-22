@@ -143,7 +143,6 @@ exports.test = ( browser, pass, timeout )->
             browser.waitForCondition "window.Todo.all().length > 0", (err, boolean)->
 
               should.not.exist err
-              console.log boolean
               should.equal true, boolean
               done()
 
