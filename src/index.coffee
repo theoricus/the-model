@@ -226,8 +226,6 @@ class Model extends Pivot
 
   save:( callback )=>
 
-    console.log @constructor._last_action
-
     done = (data)-> callback?(data, null)
     error = (error)-> callback?(null, error)
 
