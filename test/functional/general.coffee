@@ -21,7 +21,7 @@ exports.test = ( browser, pass, timeout )->
           should.equal title, todo_title
           cb?()
 
-      create_todo = (cb, remote)->
+      create_todo = (remote, cb)->
         todo_title = "new todo"
 
         browser.elementById 'new-todo', (err, el) ->
@@ -94,7 +94,7 @@ exports.test = ( browser, pass, timeout )->
 
         it '[CREATE] should create an item', (done)->
 
-            create_todo ()->
+            create_todo false, ()->
               done()
 
         it '[READ] should read an item based on the CID', (done)->
@@ -138,7 +138,7 @@ exports.test = ( browser, pass, timeout )->
 
           browser.eval "window.remote = true", ()->
 
-          create_todo ()->
+          create_todo true, ()->
 
             browser.waitForCondition "window.Todo.all().length > 0", (err, boolean)->
 
@@ -218,7 +218,7 @@ exports.test = ( browser, pass, timeout )->
 
           browser.eval "window.remote = false", ()->
 
-            create_todo ()->
+            create_todo false, ()->
 
               save_todo done
 
