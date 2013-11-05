@@ -35,6 +35,7 @@ exports.create = (req, res)->
   for key, value of todo
     todo[key] = true if todo[key] is "true"
     todo[key] = false if todo[key] is "false"
+    todo[key] = 0 if todo[key] is "0"
 
   db.create todo, (data, err)=>
     unless err

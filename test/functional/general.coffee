@@ -97,6 +97,19 @@ exports.test = ( browser, pass, timeout )->
             create_todo false, ()->
               done()
 
+        it '[CREATE:ERROR] should throw an error if the attribute value type is wrong', (done)->
+
+            browser.eval "window.Todo.create({'title':'wrong todo', 'done':'1'}).get('title')", (err, title)->
+              should.exist err
+              done()
+
+        it '[CREATE:ERROR] should throw an error if the attribute type is wrong', (done)->
+
+            browser.eval "window.TodoTypes.create({'title':'type todo', 'done':false, 'owners':['hems','drimba','nybras'],'config':{'editable':false},'date':new Date(),'todo':new window.Todo}).get('title')", (err, title)->
+              should.not.exist err
+              should.equal 'type todo', title
+              done()
+
         it '[READ] should read an item based on the CID', (done)->
 
           browser.eval "window.Todo.read(0).cid", (err, cid)->
@@ -185,6 +198,14 @@ exports.test = ( browser, pass, timeout )->
             should.not.exist err
             should.equal found, 1
             done()
+
+        it '[ALL] should return all the items saved locally', (done)->
+
+          browser.eval "window.Todo.all(function(){})", (err, all)->
+
+            browser.waitForCondition "window.Todo.all().length > 0", (err, boolean)->
+              should.not.exist err
+              done()
 
         it '[DELETE] should delete an item', (done)->
 

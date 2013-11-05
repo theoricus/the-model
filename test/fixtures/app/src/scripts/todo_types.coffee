@@ -1,6 +1,7 @@
 Model = require "../../../../.."
+Todo = require "./todo"
 
-class Todo extends Model
+class TodoTypes extends Model
 
   @configure
 
@@ -14,9 +15,12 @@ class Todo extends Model
     keys:
       "title":String
       "done":Boolean
-      "customer_id":Number
+      "owners":Array
+      "config":Object
+      "date":Date
+      "todo":Todo
 
     id:"_id"
 
-window.Todo = Todo if window
-module.exports = Todo
+window.TodoTypes = TodoTypes if window
+module.exports = TodoTypes

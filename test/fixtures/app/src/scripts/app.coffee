@@ -3,6 +3,7 @@ $ = require "../../../../../bower_components/jquery/jquery.js"
 Template = require "../templates/app.jade"
 TemplateItem = require "../templates/item.jade"
 Todo = require "./todo"
+TodoType = require "./todo_types"
 
 class App
 
@@ -69,10 +70,10 @@ class App
       if $(e.currentTarget).val().length
 
         unless window.remote
-          Todo.create "title":$(e.currentTarget).val(), "done":false
+          Todo.create "title":$(e.currentTarget).val(), "done":false, "customer_id":0
         else
 
-          Todo.create {"title":$(e.currentTarget).val(), "done":false}, (record, raw, error)->
+          Todo.create {"title":$(e.currentTarget).val(), "done":false, "customer_id":0}, (record, raw, error)->
 
             console.log "record", record
             console.log "raw", raw

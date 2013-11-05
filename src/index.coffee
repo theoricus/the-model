@@ -4,10 +4,6 @@ Pivot = require "the-pivot"
 
 class Model extends Pivot
 
-  @_config  = urls: {}, keys: {}
-  @_records = []
-  @_last_action:null
-
   cid   : null
   keys: null
   id:"id"
@@ -16,6 +12,13 @@ class Model extends Pivot
     Configures model
   -------------------------------------------------------------------------- ###
   @configure:( config )->
+
+    @klass = @.toString().match(/function\s(.*)\(\)/)[1]
+
+    @_config  = urls: {}, keys: {}
+    @_records = []
+    @_last_action=null
+    @klass=""
 
     # configure urls ending points
     for method, i in ["create", "read", "update", "delete", "all", "find"]
@@ -56,11 +59,14 @@ class Model extends Pivot
         when 'String' then return (typeof val is 'string')
         when 'Number' then return (typeof val is 'number')
         when 'Boolean' then return (typeof val is 'boolean')
+        when 'Array' then return (typeof val is 'object')
+        when 'Object' then return (typeof val is 'object')
+        when 'Date' then return (typeof val is 'object')
         else return (val instanceof type)
 
     # validates against the given method
     else
-      return checker val
+      return (val instanceof checker)
 
 
   ### --------------------------------------------------------------------------
@@ -206,9 +212,9 @@ class Model extends Pivot
         else
           found.update keys
 
-      callback do @all, data, null
+      callback data, null
     req.error (error)->
-      callback do @all, null, error
+      callback null, error
 
   @find:( keys )->
     # returns local version
@@ -266,7 +272,3 @@ class Model extends Pivot
 # exporting
 if exports and module and module.exports
   module.exports = Model
-else if define and define.amd
-  define -> Model
-else if window
-  (window.the or= {}).model = Model
