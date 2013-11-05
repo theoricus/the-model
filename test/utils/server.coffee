@@ -13,7 +13,7 @@ app = null
 
 matcher = (req)->
     parsed = url.parse req.url
-    return parsed.pathname.match /lib\/index\.js/
+    return parsed.pathname.match /__split__\/lib\/index\.js/
 
 exports.start = (coverage, done)->
   if coverage

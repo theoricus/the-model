@@ -24,7 +24,7 @@ build:
 	@$(CS) -bco lib src
 
 build.test: build
-	@cp lib/index.js test/fixturess/the-model.js
+	@cp lib/index.js test/fixtures/the-model.js
 
 
 
@@ -125,6 +125,9 @@ test.cover.publish:
 		../../../../../$(COVERALLS)
 
 	@cd ../../../../..
+
+test.api.run:
+	@cd test/fixtures/api; ../../../$(CS) index.coffee --autoinit
 
 test.api.run:
 	@cd test/fixtures/api; ../../../$(CS) index.coffee --autoinit
