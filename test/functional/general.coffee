@@ -14,6 +14,26 @@ exports.test = ( browser, pass, timeout )->
 
     describe '[api]', ->
 
+      save_todo=(cb)->
+
+        code = """
+              var done = arguments[0];
+
+              window.todo.save(function(data, err)
+              {
+                if( err )
+                  done(false)
+                else
+                  done(true)
+              })
+            """
+
+        browser.executeAsync code, (err, saved)->
+
+              should.not.exist err
+
+              cb?(saved)
+
       get_title = (todo_title, cb)->
         browser.eval "window.Todo.read(0).get('title')", (err, title)->
 
@@ -213,26 +233,39 @@ exports.test = ( browser, pass, timeout )->
 
       describe 'LOCAL AND REMOTE', ->
 
-        save_todo=(cb)->
+        it '[CREATE] should create an item', (done)->
 
-          code = """
-                var done = arguments[0];
+          browser.eval "window.remote = false", ()->
 
-                window.todo.save(function(data, err)
-                {
-                  if( err )
-                    done(false)
-                  else
-                    done(true)
-                })
-              """
+            create_todo false, ()->
 
-          browser.executeAsync code, (err, saved)->
-
-                should.not.exist err
+              save_todo (saved)->
                 should.equal true, saved
+                done()
 
-                cb?()
+
+        it '[UPDATE] should update an item', (done)->
+
+            update_todo "todo_0", ()->
+
+              save_todo (saved)->
+                should.equal true, saved
+                done()
+
+        it '[DELETE] should delete an item', (done)->
+
+            delete_todo "todo_0", ()->
+
+              save_todo (saved)->
+                should.equal true, saved
+                done()
+
+      describe 'REMOTE:ERROR', ->
+
+        it "should shutdown the API", (done)->
+          browser.eval "window.todo.fail_rest()", ()->
+            done()
+
 
         it '[CREATE] should create an item', (done)->
 
@@ -240,23 +273,26 @@ exports.test = ( browser, pass, timeout )->
 
             create_todo false, ()->
 
-              save_todo done
+              save_todo (saved)->
+                should.equal false, saved
+                done()
 
         it '[UPDATE] should update an item', (done)->
 
-          browser.eval "window.remote = false", ()->
-
             update_todo "todo_0", ()->
 
-              save_todo done
+              save_todo (saved)->
+                should.equal false, saved
+                done()
 
         it '[DELETE] should delete an item', (done)->
 
-          browser.eval "window.remote = false", ()->
-
             delete_todo "todo_0", ()->
 
-              save_todo done
+              save_todo (saved)->
+                should.equal false, saved
+                done()
+
 
 
 

@@ -6,11 +6,11 @@ class TodoTypes extends Model
   @configure
 
     urls:
-      'all':'http://localhost:3000/todos'
-      'create':'http://localhost:3000/todos'
-      'read':'http://localhost:3000/todos/:id'
-      'update':'http://localhost:3000/todos/:id'
-      'delete':'http://localhost:3000/todos/:id'
+      'all':'http://localhost:3000/todos2'
+      'create':'http://localhost:3000/todos2'
+      'read':'http://localhost:3000/todos2/:id'
+      'update':'http://localhost:3000/todos2/:id'
+      'delete':'http://localhost:3000/todos2/:id'
 
     keys:
       "title":String

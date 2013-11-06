@@ -18,5 +18,15 @@ class Todo extends Model
 
     id:"_id"
 
+  fail_rest:()->
+
+    for key,val of @constructor._config.urls
+      @constructor._config.urls[key] = "#{val}/error"
+
+  succeed_rest:()->
+
+    for key,val of @constructor._config.urls
+      @constructor._config.urls[key] = val.toString().replace(/\/error/,"")
+
 window.Todo = Todo if window
 module.exports = Todo
