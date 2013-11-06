@@ -62,7 +62,6 @@ class Model extends Pivot
         when 'Array' then return (typeof val is 'object')
         when 'Object' then return (typeof val is 'object')
         when 'Date' then return (typeof val is 'object')
-        else return (val instanceof type)
 
     # validates against the given method
     else

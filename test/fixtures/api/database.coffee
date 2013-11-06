@@ -12,6 +12,9 @@ module.exports = class Database
     MongoDatabase.connect @mongoUri, (err, @db)=>
       unless err
         @db.createCollection "todos", ()->
+      else
+        @db.collection.remove {}, ()->
+          @db.createCollection "todos", ()->
 
       done @
 
