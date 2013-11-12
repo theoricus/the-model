@@ -35,6 +35,7 @@ docs:
 	cd src && \
 	../$(CODO) \
 	-o ../docs \
+	--cautious \
 	-t 'The-Model' \
 	index.coffee \
 	.

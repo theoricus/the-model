@@ -10,47 +10,44 @@ Pivot = require "the-pivot"
 
 class Model extends Pivot
 
-  ###*
-    Stores the local ID of the object (client id).
-
-    @property cid {Number}
+  ###
+  @property {Number} Stores the local ID of the object (client id).
   ###
   cid   : null
-  keys: null
-  id:"id"
-
-  ###*
-    Responsible for configuring the Models rest URLs, attributes and ID's key name.
-
-    @method configure
-    @static
-    @param config {Object} Object containing the REST urls, and the Model attributes.
-    @example
-
-        ``` coffeescript
-        class Todo extends Model
-
-          @configure
-
-            urls:
-              'all':'http://localhost:3000/todos'
-              'create':'http://localhost:3000/todos'
-              'read':'http://localhost:3000/todos/:id'
-              'update':'http://localhost:3000/todos/:id'
-              'delete':'http://localhost:3000/todos/:id'
-
-            keys:
-              "title":String
-              "done":Boolean
-
-            id:"_id"
-        ```
 
   ###
+  @property {Object} Stores the instances attributes
+  ###
+  keys: null
 
-  ### --------------------------------------------------------------------------
-    Configures model
-  -------------------------------------------------------------------------- ###
+  ###
+  @property {Object} ID's key name, it might change to "_id" if the webservices return data from mongodb.
+  ###
+  id:"id"
+
+  ###
+    Responsible for configuring the Models rest URLs, attributes and ID's key name.
+
+    @param config {Object} Object containing the REST urls, and the Model attributes.
+    @example
+      class Todo extends Model
+
+        @configure
+
+          urls:
+            'all':'http://localhost:3000/todos'
+            'create':'http://localhost:3000/todos'
+            'read':'http://localhost:3000/todos/:id'
+            'update':'http://localhost:3000/todos/:id'
+            'delete':'http://localhost:3000/todos/:id'
+
+          keys:
+            "title":String
+            "done":Boolean
+
+          id:"_id"
+
+  ###
   @configure:( config )->
 
     @klass = @.toString().match(/function\s(.*)\(\)/)[1]
@@ -73,23 +70,22 @@ class Model extends Pivot
 
     @extend new Pivot
 
-
-  ### --------------------------------------------------------------------------
-    Constructor
-  -------------------------------------------------------------------------- ###
-
   _init:(dict)->
     @keys = {}
-    @cid = @_guid()
+    @cid = @constructor._records.length
     @set dict
 
-  _guid:()=>
-    @constructor._records.length
+  ### 
 
-  ### --------------------------------------------------------------------------
     Global validate method, will perform simple validations for native types
     as well as run custom validations against the given methods in configuration
-  -------------------------------------------------------------------------- ###
+
+    Validates the attributes values against the 'types' setted in the `@configure` method.
+
+    @param key {String} Attribute to be validated
+    @param val {String} Value to validate
+  
+  ###
   validate : (key, val)->
     checker = @constructor._config.keys[key]
 

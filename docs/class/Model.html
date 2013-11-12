@@ -45,41 +45,42 @@
 </div>
 <div class='tags'>
 </div>
-      <h2>Variables Summary</h2>
-      <dl class='constants'>
-  <dt id='cid-variable'>
-    cid
-    =
-  </dt>
-  <dd>
-    <pre><code class='coffeescript'>null</code></pre>
-    <div class='docstring'>
-  <ul>
-<li>Stores the local ID of the object (client id).
-@property cid {Number}</li>
-</ul>
-
-</div>
-<div class='tags'>
-</div>
-  </dd>
-  <dt id='keys-variable'>
-    keys
-    =
-  </dt>
-  <dd>
-    <pre><code class='coffeescript'>null</code></pre>
-    
-  </dd>
-  <dt id='id-variable'>
-    id
-    =
-  </dt>
-  <dd>
-    <pre><code class='coffeescript'>&quot;id&quot;</code></pre>
-    
-  </dd>
-</dl>
+      <h2>Property Summary</h2>
+      <dl class='properties'>
+        <dt id='cid-property'>
+          <span class='signature'>
+            (Number)
+            <b>
+              cid
+            </b>
+          </span>
+        </dt>
+        <dd class='desc'>
+          Stores the local ID of the object (client id).
+        </dd>
+        <dt id='keys-property'>
+          <span class='signature'>
+            (Object)
+            <b>
+              keys
+            </b>
+          </span>
+        </dt>
+        <dd class='desc'>
+          Stores the instances attributes
+        </dd>
+        <dt id='id-property'>
+          <span class='signature'>
+            (Object)
+            <b>
+              id
+            </b>
+          </span>
+        </dt>
+        <dd class='desc'>
+          ID's key name, it might change to "_id" if the webservices return data from mongodb.
+        </dd>
+      </dl>
       <h2>Class Method Summary</h2>
       <ul class='summary'>
   <li>
@@ -91,7 +92,7 @@
       </a>
     </span>
     <span class='desc'>
-      <h2 id="-configures-model">-------------------------------------------------------------------------- Configures model</h2>
+      Responsible for configuring the Models rest URLs, attributes and ID&#39;s key name.
     </span>
   </li>
   <li>
@@ -174,19 +175,6 @@
       </a>
     </span>
     <span class='desc'>
-      <h2 id="-constructor">-------------------------------------------------------------------------- Constructor</h2>
-    </span>
-  </li>
-  <li>
-    <span class='signature'>
-      <a href='#_guid-dynamic'>
-        #
-(void)
-<b>_guid</b><span>()</span>
-      </a>
-    </span>
-    <span class='bound note title'>Bound</span>
-    <span class='desc'>
     </span>
   </li>
   <li>
@@ -198,7 +186,7 @@
       </a>
     </span>
     <span class='desc'>
-      <h2 id="-global-validate-method-will-perform-simple-validations-for-native-types-as-well-as-run-custom-validations-against-the-given-methods-in-configuration">-------------------------------------------------------------------------- Global validate method, will perform simple validations for native types as well as run custom validations against the given methods in configuration</h2>
+      Global validate method, will perform simple validations for native types as well as run custom validations against the given methods in configuration<p> Validates the attributes values against the &#39;types&#39; setted in the <code>@configure</code> method.</p>
     </span>
   </li>
   <li>
@@ -222,8 +210,6 @@
       </a>
     </span>
     <span class='desc'>
-      set &#39;prop&#39;, &#39;val&#39;set prop: &#39;val&#39;, prop2: &#39;val2&#39;
-
     </span>
   </li>
   <li>
@@ -271,10 +257,42 @@
       <br>
     </p>
     <div class='docstring'>
-  <h2 id="-configures-model">-------------------------------------------------------------------------- Configures model</h2>
+  <p>Responsible for configuring the Models rest URLs, attributes and ID&#39;s key name.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      
+    </h4>
+    <pre><code class='coffeescript'>class Todo extends Model
 
+  @configure
+
+    urls:
+      &#39;all&#39;:&#39;http:&#47;&#47;localhost:3000&#47;todos&#39;
+      &#39;create&#39;:&#39;http:&#47;&#47;localhost:3000&#47;todos&#39;
+      &#39;read&#39;:&#39;http:&#47;&#47;localhost:3000&#47;todos&#47;:id&#39;
+      &#39;update&#39;:&#39;http:&#47;&#47;localhost:3000&#47;todos&#47;:id&#39;
+      &#39;delete&#39;:&#39;http:&#47;&#47;localhost:3000&#47;todos&#47;:id&#39;
+
+    keys:
+      &quot;title&quot;:String
+      &quot;done&quot;:Boolean
+
+    id:&quot;_id&quot;</code></pre>
+  </div>
 </div>
 <div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>config</span>
+      <span class='type'>
+        (<tt>Object</tt>)
+      </span>
+      &mdash;
+      <span class='desc'>Object containing the REST urls, and the Model attributes.</span>
+    </li>
+  </ul>
 </div>
   </div>
   <div class='method_details'>
@@ -351,21 +369,6 @@
 <b>_init</b><span>(dict)</span>
       <br>
     </p>
-    <div class='docstring'>
-  <h2 id="-constructor">-------------------------------------------------------------------------- Constructor</h2>
-
-</div>
-<div class='tags'>
-</div>
-  </div>
-  <div class='method_details'>
-    <p class='signature' id='_guid-dynamic'>
-      #
-(void)
-<b>_guid</b><span>()</span>
-      <span class='bound note'>Bound</span>
-      <br>
-    </p>
     
   </div>
   <div class='method_details'>
@@ -376,8 +379,9 @@
       <br>
     </p>
     <div class='docstring'>
-  <h2 id="-global-validate-method-will-perform-simple-validations-for-native-types-as-well-as-run-custom-validations-against-the-given-methods-in-configuration">-------------------------------------------------------------------------- Global validate method, will perform simple validations for native types as well as run custom validations against the given methods in configuration</h2>
-
+  <p>Global validate method, will perform simple validations for native types
+ as well as run custom validations against the given methods in configuration</p><p> Validates the attributes values against the &#39;types&#39; setted in the <code>@configure</code> method.</p><p> @param key {String} Attribute to be validated
+ @param val {String} Value to validate</p>
 </div>
 <div class='tags'>
 </div>
@@ -403,12 +407,7 @@
 <b>set</b><span>(args...)</span>
       <br>
     </p>
-    <div class='docstring'>
-  <p>set &#39;prop&#39;, &#39;val&#39;
-set prop: &#39;val&#39;, prop2: &#39;val2&#39;</p>
-</div>
-<div class='tags'>
-</div>
+    
   </div>
   <div class='method_details'>
     <p class='signature' id='update-dynamic'>
@@ -441,7 +440,7 @@ set prop: &#39;val&#39;, prop2: &#39;val2&#39;</p>
 </div>
     </div>
     <div id='footer'>
-  November 11, 13 23:04:10 by
+  November 12, 13 00:03:06 by
   <a href='https://github.com/coffeescript/codo' title='CoffeeScript API documentation generator'>
     Codo
   </a>
