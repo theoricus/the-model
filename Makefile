@@ -1,3 +1,5 @@
+.PHONY: docs
+
 POLVO=node_modules/polvo/bin/polvo
 
 SELENIUM=test/services/selenium-server-standalone-2.35.0.jar
@@ -10,6 +12,8 @@ COVERALLS=node_modules/coveralls/bin/coveralls.js
 
 MVERSION=node_modules/mversion/bin/version
 VERSION=`$(MVERSION) | sed -E 's/\* package.json: //g'`
+
+YUIDOC=node_modules/yuidocjs/lib/cli.js
 
 
 setup: install_test_suite
@@ -26,6 +30,27 @@ build:
 build.test: build
 	@cp lib/index.js test/fixtures/the-model.js
 
+# docs generation
+docs:
+	cd src && \
+	../$(YUIDOC) \
+	--syntaxtype coffee \
+	-e .coffee \
+	-o ../docs/src \
+	-t ../docs/yuidoc-bootstrap-theme.git \
+	-H ../docs/yuidoc-bootstrap-theme.git/helpers/helpers.js \
+	.
+
+docs.server:
+	cd src && \
+	../$(YUIDOC) \
+	--syntaxtype coffee \
+	-e .coffee \
+	-o ../docs/src \
+	-t ../docs/yuidoc-bootstrap-theme.git \
+	-H ../docs/yuidoc-bootstrap-theme.git/helpers/helpers.js \
+	--server \
+	.
 
 
 bump.minor:
