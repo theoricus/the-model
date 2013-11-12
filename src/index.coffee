@@ -2,11 +2,51 @@ _ = require 'lodash'
 $ = require '../bower_components/jquery/jquery'
 Pivot = require "the-pivot"
 
+###*
+  The Model class is responsible for saving data locally and remotelly requesting web-services.
+
+  @class Model
+###
+
 class Model extends Pivot
 
+  ###*
+    Stores the local ID of the object (client id).
+
+    @property cid {Number}
+  ###
   cid   : null
   keys: null
   id:"id"
+
+  ###*
+    Responsible for configuring the Models rest URLs, attributes and ID's key name.
+
+    @method configure
+    @static
+    @param config {Object} Object containing the REST urls, and the Model attributes.
+    @example
+
+        ``` coffeescript
+        class Todo extends Model
+
+          @configure
+
+            urls:
+              'all':'http://localhost:3000/todos'
+              'create':'http://localhost:3000/todos'
+              'read':'http://localhost:3000/todos/:id'
+              'update':'http://localhost:3000/todos/:id'
+              'delete':'http://localhost:3000/todos/:id'
+
+            keys:
+              "title":String
+              "done":Boolean
+
+            id:"_id"
+        ```
+
+  ###
 
   ### --------------------------------------------------------------------------
     Configures model

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset='UTF-8'>
+  <title>The-Model</title>
+  <script src='../javascript/application.js'></script>
+  <script src='../javascript/search.js'></script>
+  <link rel='stylesheet' href='../stylesheets/application.css' type='text/css'>
+</head>
+  <body>
+    <div id='base' data-path='../'></div>
+<div id='header'>
+  <div id='menu'>
+    <a href='../alphabetical_index.html' title='Index'>
+      Index
+    </a>
+    &raquo;
+    <span class='title'>Model</span>
+  </div>
+</div>
+    <div id='content'>
+      <h1>
+        Class:
+        Model
+      </h1>
+      <table class='box'>
+        <tr>
+          <td>Defined in:</td>
+          <td>index.coffee</td>
+        </tr>
+        <tr>
+          <td>Inherits:</td>
+          <td>
+            Pivot
+          </td>
+        </tr>
+      </table>
+      <h2>Overview</h2>
+      <div class='docstring'>
+  <ul>
+<li>The Model class is responsible for saving data locally and remotelly requesting web-services.
+@class Model</li>
+</ul>
+
+</div>
+<div class='tags'>
+</div>
+      <h2>Variables Summary</h2>
+      <dl class='constants'>
+  <dt id='cid-variable'>
+    cid
+    =
+  </dt>
+  <dd>
+    <pre><code class='coffeescript'>null</code></pre>
+    <div class='docstring'>
+  <ul>
+<li>Stores the local ID of the object (client id).
+@property cid {Number}</li>
+</ul>
+
+</div>
+<div class='tags'>
+</div>
+  </dd>
+  <dt id='keys-variable'>
+    keys
+    =
+  </dt>
+  <dd>
+    <pre><code class='coffeescript'>null</code></pre>
+    
+  </dd>
+  <dt id='id-variable'>
+    id
+    =
+  </dt>
+  <dd>
+    <pre><code class='coffeescript'>&quot;id&quot;</code></pre>
+    
+  </dd>
+</dl>
+      <h2>Class Method Summary</h2>
+      <ul class='summary'>
+  <li>
+    <span class='signature'>
+      <a href='#configure-static'>
+        .
+(void)
+<b>configure</b><span>(config)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      <h2 id="-configures-model">-------------------------------------------------------------------------- Configures model</h2>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#_create-static'>
+        .
+(void)
+<b>_create</b><span>(props)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      <h2 id="-curd-and-helpful-methods">-------------------------------------------------------------------------- CURD and helpful methods</h2>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#create-static'>
+        .
+(void)
+<b>create</b><span>(props, callback)</span>
+      </a>
+    </span>
+    <span class='desc'>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#read-static'>
+        .
+(void)
+<b>read</b><span>(id, callback)</span>
+      </a>
+    </span>
+    <span class='desc'>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#all-static'>
+        .
+(void)
+<b>all</b><span>(callback)</span>
+      </a>
+    </span>
+    <span class='desc'>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#find-static'>
+        .
+(void)
+<b>find</b><span>(keys)</span>
+      </a>
+    </span>
+    <span class='desc'>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#fetch-static'>
+        .
+(void)
+<b>fetch</b><span>(url, type, data)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      <h2 id="-middleware">-------------------------------------------------------------------------- Middleware</h2>
+    </span>
+  </li>
+</ul>
+      <h2>Instance Method Summary</h2>
+      <ul class='summary'>
+  <li>
+    <span class='signature'>
+      <a href='#_init-dynamic'>
+        #
+(void)
+<b>_init</b><span>(dict)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      <h2 id="-constructor">-------------------------------------------------------------------------- Constructor</h2>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#_guid-dynamic'>
+        #
+(void)
+<b>_guid</b><span>()</span>
+      </a>
+    </span>
+    <span class='bound note title'>Bound</span>
+    <span class='desc'>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#validate-dynamic'>
+        #
+(void)
+<b>validate</b><span>(key, val)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      <h2 id="-global-validate-method-will-perform-simple-validations-for-native-types-as-well-as-run-custom-validations-against-the-given-methods-in-configuration">-------------------------------------------------------------------------- Global validate method, will perform simple validations for native types as well as run custom validations against the given methods in configuration</h2>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#get-dynamic'>
+        #
+(void)
+<b>get</b><span>(keyumn)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      <h2 id="-getter-setter">-------------------------------------------------------------------------- Getter / Setter</h2>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#set-dynamic'>
+        #
+(void)
+<b>set</b><span>(args...)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      set &#39;prop&#39;, &#39;val&#39;set prop: &#39;val&#39;, prop2: &#39;val2&#39;
+
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#update-dynamic'>
+        #
+(void)
+<b>update</b><span>(keys, callback)</span>
+      </a>
+    </span>
+    <span class='desc'>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#delete-dynamic'>
+        #
+(void)
+<b>delete</b><span>(callback)</span>
+      </a>
+    </span>
+    <span class='desc'>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#save-dynamic'>
+        #
+(void)
+<b>save</b><span>(callback)</span>
+      </a>
+    </span>
+    <span class='bound note title'>Bound</span>
+    <span class='desc'>
+    </span>
+  </li>
+</ul>
+      <h2>Class Method Details</h2>
+      <div class='methods'>
+  <div class='method_details'>
+    <p class='signature' id='configure-static'>
+      .
+(void)
+<b>configure</b><span>(config)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <h2 id="-configures-model">-------------------------------------------------------------------------- Configures model</h2>
+
+</div>
+<div class='tags'>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='_create-static'>
+      .
+(void)
+<b>_create</b><span>(props)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <h2 id="-curd-and-helpful-methods">-------------------------------------------------------------------------- CURD and helpful methods</h2>
+
+</div>
+<div class='tags'>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='create-static'>
+      .
+(void)
+<b>create</b><span>(props, callback)</span>
+      <br>
+    </p>
+    
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='read-static'>
+      .
+(void)
+<b>read</b><span>(id, callback)</span>
+      <br>
+    </p>
+    
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='all-static'>
+      .
+(void)
+<b>all</b><span>(callback)</span>
+      <br>
+    </p>
+    
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='find-static'>
+      .
+(void)
+<b>find</b><span>(keys)</span>
+      <br>
+    </p>
+    
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='fetch-static'>
+      .
+(void)
+<b>fetch</b><span>(url, type, data)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <h2 id="-middleware">-------------------------------------------------------------------------- Middleware</h2>
+
+</div>
+<div class='tags'>
+</div>
+  </div>
+</div>
+      <h2>Instance Method Details</h2>
+      <div class='methods'>
+  <div class='method_details'>
+    <p class='signature' id='_init-dynamic'>
+      #
+(void)
+<b>_init</b><span>(dict)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <h2 id="-constructor">-------------------------------------------------------------------------- Constructor</h2>
+
+</div>
+<div class='tags'>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='_guid-dynamic'>
+      #
+(void)
+<b>_guid</b><span>()</span>
+      <span class='bound note'>Bound</span>
+      <br>
+    </p>
+    
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='validate-dynamic'>
+      #
+(void)
+<b>validate</b><span>(key, val)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <h2 id="-global-validate-method-will-perform-simple-validations-for-native-types-as-well-as-run-custom-validations-against-the-given-methods-in-configuration">-------------------------------------------------------------------------- Global validate method, will perform simple validations for native types as well as run custom validations against the given methods in configuration</h2>
+
+</div>
+<div class='tags'>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='get-dynamic'>
+      #
+(void)
+<b>get</b><span>(keyumn)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <h2 id="-getter-setter">-------------------------------------------------------------------------- Getter / Setter</h2>
+
+</div>
+<div class='tags'>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='set-dynamic'>
+      #
+(void)
+<b>set</b><span>(args...)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>set &#39;prop&#39;, &#39;val&#39;
+set prop: &#39;val&#39;, prop2: &#39;val2&#39;</p>
+</div>
+<div class='tags'>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='update-dynamic'>
+      #
+(void)
+<b>update</b><span>(keys, callback)</span>
+      <br>
+    </p>
+    
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='delete-dynamic'>
+      #
+(void)
+<b>delete</b><span>(callback)</span>
+      <br>
+    </p>
+    
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='save-dynamic'>
+      #
+(void)
+<b>save</b><span>(callback)</span>
+      <span class='bound note'>Bound</span>
+      <br>
+    </p>
+    
+  </div>
+</div>
+    </div>
+    <div id='footer'>
+  November 11, 13 23:04:10 by
+  <a href='https://github.com/coffeescript/codo' title='CoffeeScript API documentation generator'>
+    Codo
+  </a>
+  2.0.0-rc.4
+  &#10034;
+  Press H to see the keyboard shortcuts
+  &#10034;
+  <a href='http://twitter.com/netzpirat' target='_parent'>@netzpirat</a>
+  &#10034;
+  <a href='http://twitter.com/_inossidabile' target='_parent'>@_inossidabile</a>
+  &#10034;
+  <a href='https://mksoft.ch' target='_parent'>mksoft.ch</a>
+</div>
+<iframe id='search_frame'></iframe>
+<div id='fuzzySearch'>
+  <input type='text'>
+  <ol></ol>
+</div>
+<div id='help'>
+  <p>
+    Quickly fuzzy find classes, mixins, methods, file:
+  </p>
+  <ul>
+    <li>
+      <span>T</span>
+      Open fuzzy finder dialog
+    </li>
+  </ul>
+  <p>
+    Control the navigation frame:
+  </p>
+  <ul>
+    <li>
+      <span>L</span>
+      Toggle list view
+    </li>
+    <li>
+      <span>C</span>
+      Show class list
+    </li>
+    <li>
+      <span>I</span>
+      Show mixin list
+    </li>
+    <li>
+      <span>F</span>
+      Show file list
+    </li>
+    <li>
+      <span>M</span>
+      Show method list
+    </li>
+    <li>
+      <span>E</span>
+      Show extras list
+    </li>
+  </ul>
+  <p>
+    You can focus and blur the search input:
+  </p>
+  <ul>
+    <li>
+      <span>S</span>
+      Focus search input
+    </li>
+    <li>
+      <span>Esc</span>
+      Blur search input
+    </li>
+  </ul>
+</div>
+  </body>
+</html>

@@ -13,7 +13,7 @@ COVERALLS=node_modules/coveralls/bin/coveralls.js
 MVERSION=node_modules/mversion/bin/version
 VERSION=`$(MVERSION) | sed -E 's/\* package.json: //g'`
 
-YUIDOC=node_modules/yuidocjs/lib/cli.js
+CODO=node_modules/codo/bin/codo
 
 
 setup: install_test_suite
@@ -33,12 +33,10 @@ build.test: build
 # docs generation
 docs:
 	cd src && \
-	../$(YUIDOC) \
-	--syntaxtype coffee \
-	-e .coffee \
-	-o ../docs/src \
-	-t ../docs/yuidoc-bootstrap-theme.git \
-	-H ../docs/yuidoc-bootstrap-theme.git/helpers/helpers.js \
+	../$(CODO) \
+	-o ../docs \
+	-t 'The-Model' \
+	index.coffee \
 	.
 
 docs.server:
