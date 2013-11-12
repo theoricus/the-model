@@ -33,7 +33,7 @@ Configuring your model.
 class User extends AppModel
   
   # general config method
-  @config
+  @configure
     
     # url ending points
     urls:
