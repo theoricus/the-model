@@ -25,7 +25,8 @@
   },
   "dependencies": {
     "lodash": "2.2.x",
-    "the-pivot": "~0.2.2"
+    "the-bind": "0.1.x",
+    "the-event": "0.3.x"
   },
   "devDependencies": {
     "wd": "0.1.x",

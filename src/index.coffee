@@ -1,6 +1,8 @@
 _ = require 'lodash'
 $ = require '../bower_components/jquery/jquery'
-Pivot = require "the-pivot"
+
+Event = require "the-event"
+Bind = require 'the-bind'
 
 ###*
   The Model class is responsible for saving data locally and remotelly requesting web-services.
@@ -8,7 +10,13 @@ Pivot = require "the-pivot"
   @class Model
 ###
 
-class Model extends Pivot
+class Model extends Event
+
+  ###
+  @property {Bind} A simple data store with on/off switches to watch specefic
+  property changing.
+  ###
+  store: null
 
   ###
   @property {Number} Stores the local ID of the object (client id).
@@ -50,12 +58,9 @@ class Model extends Pivot
   ###
   @configure:( config )->
 
-    @klass = @.toString().match(/function\s(.*)\(\)/)[1]
-
     @_config  = urls: {}, keys: {}
     @_records = []
     @_last_action=null
-    @klass=""
 
     # configure urls ending points
     for method, i in ["create", "read", "update", "delete", "all", "find"]
@@ -68,12 +73,10 @@ class Model extends Pivot
 
     @id = config.id if config.id
 
-    @extend new Pivot
-
   _init:(dict)->
     @keys = {}
     @cid = @constructor._records.length
-    @set dict
+    @store.set dict
 
   ### 
 
@@ -117,7 +120,7 @@ class Model extends Pivot
       dict = args[0]
       for key, val of dict
         if @constructor._config.keys[key]
-          @set key, val
+          @store.set key, val
         else if key isnt @constructor.id
           @[key] = val
         else if key is @constructor.id
@@ -140,6 +143,7 @@ class Model extends Pivot
   @_create:(props)->
     keys = {}
     record = new @
+    record.store = new Bind
 
     for k, v of props
       if @_config.keys[k]
@@ -161,16 +165,16 @@ class Model extends Pivot
     # returns created model if callback isn't specified
     unless callback?
       record = (@_create props)
-      @trigger "create", record
-      @trigger "change", record
+      @emit "create", record
+      @emit "change", record
       return record
 
     # sends request to server and handles response
     req = @fetch @_config.urls.create, 'POST', props
     req.done (data)=>
       record = @_create data
-      @trigger "create", record
-      @trigger "change", record
+      @emit "create", record
+      @emit "change", record
       callback record, null
     req.error (error)-> callback null, error
 
@@ -191,20 +195,20 @@ class Model extends Pivot
 
 
   update:(keys, callback)->
-    @set keys
+    @store.set keys
     @constructor._last_action = "update"
 
     unless callback?
-      @trigger "update", @
-      @trigger "change", @
+      @emit "update", @
+      @emit "change", @
       return @
 
     # sends request to server and handles response
     url = @constructor._config.urls.update.replace /(\:\w+)$/, @id
     req = @constructor.fetch url, 'PUT', keys
     req.done (data)=>
-      @trigger "update"
-      @trigger "change"
+      @emit "update"
+      @emit "change"
       callback @, null
     req.error (error)=> callback null, error
 
@@ -216,16 +220,16 @@ class Model extends Pivot
     @constructor._last_action = "delete"
 
     unless callback?
-      @trigger "change", @
-      @trigger "delete", @
+      @emit "change", @
+      @emit "delete", @
       return true
 
     # sends request to server and handles response
     url = @constructor._config.urls.delete.replace /(\:\w+)$/, @id
     req = @constructor.fetch url, 'DELETE'
     req.done (data)=>
-      @trigger "change"
-      @trigger "delete"
+      @emit "change"
+      @emit "delete"
       callback true, null
     req.error (error)=> callback false, error
 
