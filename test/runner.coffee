@@ -78,4 +78,5 @@ describe "[#{env}]", ->
       for file in files
         
         {test} = require file
-        test browser, pass, timeout
+        if test
+          test browser, pass, timeout
