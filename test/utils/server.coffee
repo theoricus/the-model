@@ -13,6 +13,8 @@ app = null
 
 matcher = (req)->
     parsed = url.parse req.url
+    console.log "REQUEST URL #{req.url}"
+    console.log "PARSED URL #{parsed}"
     return parsed.pathname.match /__split__\/lib\/index\.js/
 
 exports.start = (coverage, done)->
