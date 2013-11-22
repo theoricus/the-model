@@ -3,7 +3,7 @@ shared = require './shared'
 
 exports.test = ( browser, pass, timeout )->
 
-  describe 'LOCAL AND REMOTE', ->
+  describe '[api] - SAVE', ->
 
     it '[CREATE] should create an item', (done)->
 

@@ -3,7 +3,7 @@ shared = require './shared'
 
 exports.test = ( browser, pass, timeout )->
 
-  describe 'REMOTE:ERROR', ->
+  describe '[api] - REMOTE ERRORS', ->
 
     it "should shutdown the API", (done)->
       browser.eval "window.todo.fail_rest()", ()->
