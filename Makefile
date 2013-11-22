@@ -153,9 +153,6 @@ test.cover.publish:
 test.api.run:
 	@cd test/fixtures/api; ../../../$(CS) index.coffee --autoinit
 
-test.api.run:
-	@cd test/fixtures/api; ../../../$(CS) index.coffee --autoinit
-
 test.app.run:
 	@cd test/fixtures/app; ../../../$(POLVO) -ws
 
