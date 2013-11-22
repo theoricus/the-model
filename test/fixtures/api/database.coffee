@@ -10,13 +10,9 @@ module.exports = class Database
     @mongoUri = process.env.MONGOLAB_URI or process.env.MONGOHQ_URL or "mongodb://localhost/todos_db"
 
     MongoDatabase.connect @mongoUri, (err, @db)=>
-      unless err
-        @db.createCollection "todos", ()->
-      else
-        @db.collection.remove {}, ()->
-          @db.createCollection "todos", ()->
+      @db.createCollection "todos", ()=>
+        done @
 
-      done @
 
   all:(callback)->
     @db.collection @name, strict:true, (err, collection)=>
