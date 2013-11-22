@@ -25,6 +25,10 @@ exports.start = (coverage, done)->
 
   if coverage
     app.use '/coverage', istanbul.createHandler verbose: true, resetOnGet: true
+    console.log "ROOOOOOT"
+    console.log root
+    console.log "MATHCER"
+    console.log matcher
     app.use istanbul.createClientHandler root, matcher: matcher
     app.use express.static root
   else
