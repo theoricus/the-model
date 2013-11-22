@@ -24,7 +24,9 @@ base_url = "http://localhost:8080/"
 
 
 # list of test files
-files = fsu.find (path.join __dirname, 'functional'), /\.coffee$/m
+files_base_path = (path.join __dirname, 'functional')
+# files = fsu.find (path.join __dirname, 'functional'), /\.coffee$/m
+files = ["general", "local", "remote", "save", "remote_error"]
 
 
 # sauce connect config
@@ -77,6 +79,6 @@ describe "[#{env}]", ->
 
       for file in files
         
-        {test} = require file
+        {test} = require "#{files_base_path}/#{file}"
         if test
           test browser, pass, timeout
