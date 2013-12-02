@@ -14,11 +14,12 @@ MVERSION=node_modules/mversion/bin/version
 VERSION=`$(MVERSION) | sed -E 's/\* package.json: //g'`
 
 CODO=node_modules/codo/bin/codo
+BOWER=node_modules/bower/bin/bower
 
 
 setup: install_test_suite
 	npm install
-	bower install
+	@$(BOWER) install
 
 
 watch:

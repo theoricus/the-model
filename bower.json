@@ -21,7 +21,6 @@
     "src"
   ],
   "dependencies": {
-    "jquery": "2.0.x",
-    "todomvc-common": "~0.1.8"
+    "jquery": "2.0.x"
   }
 }

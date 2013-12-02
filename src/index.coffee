@@ -95,9 +95,9 @@ class Model extends Pivot
         when 'String' then return (typeof val is 'string')
         when 'Number' then return (typeof val is 'number')
         when 'Boolean' then return (typeof val is 'boolean')
-        when 'Array' then return (instanceof val is 'Array')
+        when 'Array' then return (val instanceof checker)
         when 'Object' then return (typeof val is 'object')
-        when 'Date' then return (instanceof val is 'Date')
+        when 'Date' then return (val instanceof checker)
 
     # validates against the given method
     else
