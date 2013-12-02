@@ -75,7 +75,7 @@ class Model extends Pivot
     @cid = @constructor._records.length
     @set dict
 
-  ### 
+  ###
 
     Global validate method, will perform simple validations for native types
     as well as run custom validations against the given methods in configuration
@@ -84,7 +84,7 @@ class Model extends Pivot
 
     @param key {String} Attribute to be validated
     @param val {String} Value to validate
-  
+
   ###
   validate : (key, val)->
     checker = @constructor._config.keys[key]
@@ -95,9 +95,9 @@ class Model extends Pivot
         when 'String' then return (typeof val is 'string')
         when 'Number' then return (typeof val is 'number')
         when 'Boolean' then return (typeof val is 'boolean')
-        when 'Array' then return (typeof val is 'object')
+        when 'Array' then return (instanceof val is 'Array')
         when 'Object' then return (typeof val is 'object')
-        when 'Date' then return (typeof val is 'object')
+        when 'Date' then return (instanceof val is 'Date')
 
     # validates against the given method
     else
